@@ -54,10 +54,10 @@ if S.SaveMode && strcmp(S.OperationMode,'Acquisition')
 
 end
 
-DataFile_noRun  = sprintf('%s_%s_%s', S.SubjectID, S.Environement, S.Task );
+DataFile_noRun  = sprintf('%s_%s_%s', S.SubjectID, S.InputMehtod, S.Task );
 S.RunNumber     = GUI.MODEL.getRunNumber( S.dirpath_SubjectID, DataFile_noRun );
-S.DataFileFPath = sprintf('%s%s_%s_%s_%s_run%0.2d', S.dirpath_SubjectID, S.TimeStampFile, S.SubjectID, S.Environement, S.Task, S.RunNumber );
-S.DataFileName  = sprintf(  '%s_%s_%s_%s_run%0.2d',                      S.TimeStampFile, S.SubjectID, S.Environement, S.Task, S.RunNumber );
+S.DataFileFPath = sprintf('%s%s_%s_%s_%s_run%0.2d', S.dirpath_SubjectID, S.TimeStampFile, S.SubjectID, S.InputMehtod, S.Task, S.RunNumber );
+S.DataFileName  = sprintf(  '%s_%s_%s_%s_run%0.2d',                      S.TimeStampFile, S.SubjectID, S.InputMehtod, S.Task, S.RunNumber );
 
 
 %% Quick warning
@@ -113,6 +113,14 @@ end
 
 PTB_ENGINE.VIDEO.Parameters(); % <= here is all paramters
 PTB_ENGINE.VIDEO.OpenWindow(); % this opens the windows and setup the drawings according the the paramters above
+
+% Get screen physical settings & compute va2pix
+cfg = screen_config();
+S.PTB.Video.ScreenWidth    = cfg.width;
+S.PTB.Video.ScreenHeight   = cfg.height;
+S.PTB.Video.ScreenDistance = cfg.distance;
+S.PTB.Video.VAvertical     = 2*atan(S.PTB.Video.ScreenHeight/2 / S.PTB.Video.ScreenDistance) * 180/pi; % degree
+S.PTB.Video.va2pix         = S.PTB.Video.wRect(4) / S.PTB.Video.VAvertical;
 
 % PTB_ENGINE.AUDIO.         Initialize(); % !!! This must be done once before !!!
 % PTB_ENGINE.AUDIO.PLAYBACK.Parameters(); % <= here is all paramters

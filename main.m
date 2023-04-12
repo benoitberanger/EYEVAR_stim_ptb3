@@ -23,4 +23,6 @@ GUI.VIEW.OpenGUI(); % the GUI is the **ONLY** interface the user will interact w
 % Tasks codes are in +TASK/+<task_name>/Runtime.m, and the settings are in +TASK/+<task_name>/Parameters.m
 %
 
+assert(exist(fullfile(project_dir,'screen_config.m'), 'file'), 'please create a function "screen_config.m" where the ouput contains the fields .width .height .distance')
+
 end % function
