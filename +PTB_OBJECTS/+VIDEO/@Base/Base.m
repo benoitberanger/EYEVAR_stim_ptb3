@@ -3,7 +3,10 @@ classdef Base < handle
     
     properties
         
-        wPtr = '' % Pointer to the PTB screen window
+        wPtr = ''               % Pointer to the PTB screen window
+        screen_x  (1,1) double  % number of horizontal pixels of the screen
+        screen_y  (1,1) double  % number of vertical   pixels of the screen
+        va2pix    (1,1) double  % number of pixel in 1 visual angle
         
     end
     

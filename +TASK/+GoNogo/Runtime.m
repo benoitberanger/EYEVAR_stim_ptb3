@@ -17,6 +17,7 @@ try
     %% Initialize stim objects
     
     FIXATIONCROSS = TASK.PREPARE.FixationCross();
+    WALL_E        = TASK.PREPARE.WALL_E();
     
     
     %% Shortcuts

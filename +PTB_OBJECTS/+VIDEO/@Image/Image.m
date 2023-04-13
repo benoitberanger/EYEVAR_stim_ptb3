@@ -15,9 +15,6 @@ classdef Image < PTB_OBJECTS.VIDEO.Base
         
         % Internal variables
         
-        screen_x  (1,1) double % number of horizontal pixels of the screen
-        screen_y  (1,1) double % number of vertical   pixels of the screen
-        
         X         % image matrix
         map       % color map
         alpha     % transparency
