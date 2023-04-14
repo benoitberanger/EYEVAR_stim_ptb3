@@ -24,6 +24,7 @@ wall_e.img.free.LinkToWindowPtr(S.PTB.Video.wPtr);
 wall_e.img.free.GetScreenSize();
 wall_e.img.free.LoadAndColorizeAlpha(S.TaskParam.WALL_E.color.blue);
 wall_e.img.free.mask = 'NoMask';
+wall_e.img.free.scale = wall_e.va2pix * (wall_e.dim - wall_e.width) * 0.9 / wall_e.img.free.baseRect(4);
 wall_e.img.free.MakeTexture();
 wall_e.img.free.Move(wall_e.center.*[wall_e.screen_x wall_e.screen_y]);
 
@@ -33,6 +34,7 @@ wall_e.img.right.LinkToWindowPtr(S.PTB.Video.wPtr);
 wall_e.img.right.GetScreenSize();
 wall_e.img.right.mask = 'NoMask';
 wall_e.img.right.LoadAndColorizeAlpha(S.TaskParam.WALL_E.color.yellow);
+wall_e.img.right.scale = wall_e.va2pix * (wall_e.dim - wall_e.width) * 0.9 / wall_e.img.right.baseRect(4);
 wall_e.img.right.Move(wall_e.center.*[wall_e.screen_x wall_e.screen_y]);
 
 wall_e.img.left       = wall_e.img.right.CopyObject();
@@ -54,4 +56,5 @@ wall_e.img.right.MakeTexture();
 wall_e.img.left .MakeTexture();
 wall_e.img.up   .MakeTexture();
 wall_e.img.down .MakeTexture();
+
 end
