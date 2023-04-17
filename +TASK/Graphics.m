@@ -22,7 +22,8 @@ p.WALL_E.color.red      = [220 040 030 255];  % [R G B a] from 0 to 255
 p.WALL_E.color.blue     = [112 158 196 255];  % [R G B a] from 0 to 255
 
 p.WALL_E.img.free       = 'img/question_mark_96px.png';
-p.WALL_E.img.right       = 'img/arrow_right_96px.png';
+p.WALL_E.img.right      = 'img/arrow_right_96px.png';
+p.WALL_E.img.dim        = (p.WALL_E.dim - p.WALL_E.width) * 0.9; % image size, in VA
 
 
 end % function
