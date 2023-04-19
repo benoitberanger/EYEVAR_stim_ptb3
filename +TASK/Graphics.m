@@ -1,19 +1,22 @@
 function p = Graphics( p )
+% Reminder of PTB coordinates : (0,0) is the top left corner
+% In (x,y), x is the width  from left to right
+%           y is the height from top  to bottom
 
 
 %% FixationCross (common)
 
-p.FixationCross.Size     = 0.10;              %  Size_px = ScreenY_px * Size
-p.FixationCross.Width    = 0.10;              % Width_px =    Size_px * Width
-p.FixationCross.Color    = [127 127 127 255]; % [R G B a], from 0 to 255
-p.FixationCross.Position = [0.50 0.50];       % Position_px = [ScreenX_px ScreenY_px] .* Position
+p.FixationCross.dim      = 1.0;                                            % size of cross, in VA
+p.FixationCross.width    = 0.10 * p.FixationCross.dim;                     % width of cross arm, in VA
+p.FixationCross.color    = [127 127 127 255];                              % [R G B a], from 0 to 255
+p.FixationCross.position = [0.50 0.50];                                    % [ CenterX CenterY ] ratio from 0 to 1 ofscreen size
 
 
 %% WALL_E (common)
 
-p.WALL_E.dim            = 1;                                               % size of rect, in VA
-p.WALL_E.width          = p.WALL_E.dim * 0.1;                              % width of rect, in VA
-p.WALL_E.center         = [0.5 0.5];                                       % [ CenterX CenterY ] ratio from 0 to 1 ofscreen size
+p.WALL_E.dim            = 1.0;                                             % size of rect, in VA
+p.WALL_E.width          = 0.10 * p.WALL_E.dim;                             % width of rect, in VA
+p.WALL_E.center         = [0.50 0.50];                                     % [ CenterX CenterY ] ratio from 0 to 1 ofscreen size
 
 %                         [R   G   B   a  ] from 0 to 255
 p.WALL_E.color.white    = [200 200 200 255];
@@ -30,7 +33,7 @@ p.WALL_E.img.dim        = (p.WALL_E.dim - p.WALL_E.width) * 0.9;           % ima
 %% EVE (common)
 
 p.EVE.dim               = p.WALL_E.dim;                                    % size of rect/cicle, in VA
-p.EVE.excentricity      = 6;                                               % distance from WALL_E, in VA
+p.EVE.excentricity      = 6.0;                                             % distance from WALL_E, in VA
 p.EVE.color.yellow      = p.WALL_E.color.yellow;                           % [R G B a] from 0 to 255
 p.EVE.img.happy         = 'img/smiley_happy_96px.png';
 p.EVE.img.sad           = 'img/smiley_sad_96px.png';

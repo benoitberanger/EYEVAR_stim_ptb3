@@ -87,7 +87,8 @@ p.nTrial = sum(cell2mat(p.Conditions(:,3))) * p.nRep;
 %% Build planning
 
 % Create and prepare
-header = { 'event_name', 'onset(s)', 'duration(s)'};
+header = {'event_name', 'onset(s)', 'duration(s)',...
+    'direction', 'condition', 'iTrial', 'iBlock', 'idx'};
 EP     = EventPlanning(header);
 
 % NextOnset = PreviousOnset + PreviousDuration
@@ -99,13 +100,15 @@ EP.AddStartTime('StartTime',0);
 
 % --- Stim ----------------------------------------------------------------
 
-
+iTrial = 0;
 for iBlock = 1 : p.nRep
 
     cond = Shuffle(p.Conditions,2);
 
     for c = 1 : size(cond,1)
-        EP.AddEvent({ [cond{c,1} '_' cond{c,2}] NextOnset(EP) 12})
+        iTrial = iTrial + 1;
+        EP.AddEvent({ [cond{c,1} '_' cond{c,2}] NextOnset(EP) 12 ...
+            cond{c,1} cond{c,2} iTrial iBlock c})
     end
 
 end

@@ -1,14 +1,19 @@
-function [ FIXATIONCROSS ] = FixationCross()
+function [ cross ] = FixationCross()
 global S
 
-FIXATIONCROSS        = PTB_OBJECTS.VIDEO.FixationCross();
-FIXATIONCROSS.dim    = S.TaskParam.FixationCross.Size * S.PTB.Video.Y_total_px                                  ; % dim == total size (px)
-FIXATIONCROSS.width  = S.TaskParam.FixationCross.Size * S.PTB.Video.Y_total_px * S.TaskParam.FixationCross.Width; % width == arm size (px)
-FIXATIONCROSS.color  = S.TaskParam.FixationCross.Color                                                          ; % [R G B a] (0..255)
-FIXATIONCROSS.center = S.TaskParam.FixationCross.Position .* [ S.PTB.Video.X_total_px S.PTB.Video.Y_total_px ]  ; % [Xpos Ypos] (px)
+cross        = PTB_OBJECTS.VIDEO.FixationCross();
+cross.LinkToWindowPtr(S.PTB.Video.wPtr);
+cross.GetScreenSize();
 
-FIXATIONCROSS.GenerateCoords();
-FIXATIONCROSS.LinkToWindowPtr(S.PTB.Video.wPtr);
-FIXATIONCROSS.AssertReady();
+cross.va2pix = S.PTB.Video.va2pix;
+
+cross.dim    = cross.va2pix * S.TaskParam.FixationCross.dim;
+cross.width  = cross.va2pix * S.TaskParam.FixationCross.width;
+cross.color  = S.TaskParam.FixationCross.color;
+cross.center = S.TaskParam.WALL_E.center .* [cross.screen_x cross.screen_y];
+
+cross.GenerateCoords();
+
+cross.AssertReady();
 
 end % function

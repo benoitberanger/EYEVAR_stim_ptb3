@@ -57,4 +57,6 @@ wall_e.img.left .MakeTexture();
 wall_e.img.up   .MakeTexture();
 wall_e.img.down .MakeTexture();
 
+wall_e.AssertReady();
+
 end
