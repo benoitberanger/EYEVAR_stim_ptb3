@@ -18,6 +18,7 @@ try
     
     FIXATIONCROSS = TASK.PREPARE.FixationCross();
     WALL_E        = TASK.PREPARE.WALL_E();
+    EVE           = TASK.PREPARE.EVE(WALL_E);
     
     
     %% Shortcuts

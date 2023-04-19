@@ -1,4 +1,4 @@
-classdef WALL_E < PTB_OBJECTS.VIDEO.Base
+classdef EVE < PTB_OBJECTS.VIDEO.Base
 
 
     %% Properties
@@ -7,29 +7,28 @@ classdef WALL_E < PTB_OBJECTS.VIDEO.Base
 
         % Parameters
 
-        dim           (1,1) double  % size of rect, in VA
-        width         (1,1) double  % width of rect, in VA
-        center        (1,2) double  % [ CenterX CenterY ] ratio from 0 to 1 ofscreen size
+        dim           (1,1) double  % size of rect/cicle, in VA
+        excentricity  (1,1) double  % distance from WALL_E, in VA
+
+        wall_e        (1,1) PTB_OBJECTS.VIDEO.WALL_E
 
         color         (1,1) struct = struct( ...
-            'white' , [255 255 255 255], ...
-            'yellow', [255 255 000 255], ...
-            'green' , [000 255 000 255], ...
-            'red'   , [255 000 000 255]  ...
+            'yellow', [255 255 000 255] ...
             )
 
         img           (1,1) struct = struct( ...
-            'free' , [], ...
+            'happy' , [], ...
+            'sad'   , []  ...
+            )
+
+        % Internal variables
+
+        center     (1,1) struct = struct( ... % [x y] pixels, PTB coordinates
             'right', [], ...
             'left' , [], ...
             'up'   , [], ...
             'down' , []  ...
             )
-
-        % Internal variables
-
-        frameRect     (1,4) double  % [x1 y1 x2 y2] pixels, PTB coordinates
-        frameWidth    (1,1) double  % pixels
 
     end % properties
 
@@ -44,5 +43,6 @@ classdef WALL_E < PTB_OBJECTS.VIDEO.Base
         % no constructor, easier to manage and just fill the fields
 
     end % methods
+
 
 end % classef
