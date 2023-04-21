@@ -8,12 +8,15 @@ classdef SAURON < PTB_OBJECTS.VIDEO.Base
         % Parameters
 
         type      (1,:) char                                               % name of the input method
-        
+
+        dim       (1,1) double                                             % size of rect/cicle, in VA
+        color     (1,4) uint8                                              % [R G B a] from 0 to 255
+
         starttime (1,1) double = GetSecs()                                 % PTB timestamp
-        
+
         % Internal variables
 
-        rec       (1,1) SampleRecorder
+        recorder  (1,1) SampleRecorder
 
         gaze_x    (1,1) double                                             % last recorded value
         gaze_y    (1,1) double

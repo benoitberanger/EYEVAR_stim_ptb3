@@ -39,4 +39,10 @@ p.EVE.img.happy         = 'img/smiley_happy_96px.png';
 p.EVE.img.sad           = 'img/smiley_sad_96px.png';
 
 
+%% SAURON (common)
+
+p.SAURON.dim            = 0.2;                                             % size of rect/cicle, in VA
+p.SAURON.color          = [112 158 196 255];                               % [R G B a] from 0 to 255
+
+
 end % function

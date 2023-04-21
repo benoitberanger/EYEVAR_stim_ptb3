@@ -57,8 +57,8 @@ p.dur_InterTrailInterval         = 6.000 + [-0.500 +0.500];
 switch OperationMode
     case 'FastDebug'
         p.nRep = 1;
-        p.dur_ActionSelection    = 0.500 + [-0.500 +0.500];
-        p.dur_InterTrailInterval = 0.500 + [-0.500 +0.500];
+        p.dur_ActionSelection    = 1.000 + [-0.500 +0.500];
+        p.dur_InterTrailInterval = 1.000 + [-0.500 +0.500];
     case 'RealisticDebug'
         p.nRep = 1;
     case 'Acquisition'

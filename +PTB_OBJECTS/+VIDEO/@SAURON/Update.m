@@ -1,4 +1,4 @@
-function [x,y] = GetSample(self)
+function [x,y] = Update(self)
 
 switch self.type
     case 'eyelink'
@@ -8,7 +8,7 @@ switch self.type
         error('input type')
 end
 
-self.rec.AddSample([GetSecs-self.starttime x y NaN]);
+self.recorder.AddSample([GetSecs-self.starttime x y NaN]);
 self.gaze_x = x;
 self.gaze_y = y;
 

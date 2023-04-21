@@ -7,8 +7,11 @@ sauron.GetScreenSize();
 
 sauron.va2pix   = S.PTB.Video.va2pix;
 
-sauron.type = S.InputMehtod;
+sauron.type     = S.InputMehtod;
 
-sauron.rec = SampleRecorder({'t','x','y','p'}, S.EP.Data{end,2} * S.PTB.Video.FPS);
+sauron.dim      = S.TaskParam.SAURON.dim;
+sauron.color    = S.TaskParam.SAURON.color;
+
+sauron.recorder = SampleRecorder({'t','x','y','p'}, S.EP.Data{end,2} * S.PTB.Video.FPS);
 
 end % function

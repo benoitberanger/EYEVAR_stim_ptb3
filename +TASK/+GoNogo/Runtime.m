@@ -26,7 +26,7 @@ try
 
     ER          = S.ER; % EventRecorder
     BR          = S.BR; % BehaviourRecorder (EventRecorder)
-    SR          = SAURON.rec;
+    SR          = SAURON.recorder;
     S.SR        = SR;
     wPtr        = S.PTB.Video.wPtr;
     wRect       = S.PTB.Video.wRect;
@@ -112,7 +112,7 @@ try
                     end
                     frame_counter = frame_counter + 1;
 
-                    [gaze_x,gaze_y] = SAURON.GetSample();
+                    SAURON.Update();
 
                     switch state
 
@@ -186,6 +186,10 @@ try
                         otherwise %----------------------------------------
                             error('state ?')
                             
+                    end
+                    
+                    if S.Show
+                        SAURON.Draw();
                     end
 
                     Screen('DrawingFinished', wPtr);
