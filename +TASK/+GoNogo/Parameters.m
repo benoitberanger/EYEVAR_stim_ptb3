@@ -1,8 +1,9 @@
-function [ EP, TaskParam ] = Parameters( OperationMode )
+function [ EP, TaskParam ] = Parameters( OperationMode, InputMethod )
 global S
 
 if nargin < 1 % only to plot the paradigme when we execute the function outside of the main script
     OperationMode = 'Acquisition';
+    InputMethod = 'eyetracker';
 end
 
 p = struct; % This structure will contain all task specific parameters, such as Timings and Graphics
@@ -36,21 +37,46 @@ p.nRep = 40;
 
 %% Timings
 
-% all dur* are in seconds
-p.dur_ActionSelection            = 2.300 + [-0.500 +0.500];
+switch InputMethod
 
-p.dur_FixationPeriod_MinimumStay = 0.100; % gaze
-p.dur_FixationPeriod_Maximum     = 0.300 + [-0.100 +0.100]; % got to next trial
+    case 'eyetracker'
 
-p.dur_TargetAppearance           = 0.500 + [-0.100 +0.100];
+        % all dur* are in seconds
+        p.dur_ActionSelection            = 2.300 + [-0.500 +0.500];
 
-p.dur_ResponseCue_Maximum        = 0.700;                      % after, do Smiley HAPPY / BAD
-p.dur_ResponseCue_No_MinimumStay = p.dur_ResponseCue_Maximum ; % after, do smiley
-p.dur_ResponseCue_Go_MinimumStay = 0.200;                      % after, do Smiley
-p.dur_ResponseCue_Smiley         = 0.030;                      % feedback
+        p.dur_FixationPeriod_MinimumStay = 0.100; % gaze
+        p.dur_FixationPeriod_Maximum     = 0.300 + [-0.100 +0.100]; % got to next trial
 
-p.dur_InterTrailInterval         = 6.000 + [-0.500 +0.500];
+        p.dur_TargetAppearance           = 0.500 + [-0.100 +0.100];
 
+        p.dur_ResponseCue_Maximum        = 0.700;                      % after, do Smiley HAPPY / BAD
+        p.dur_ResponseCue_No_MinimumStay = p.dur_ResponseCue_Maximum ; % after, do smiley
+        p.dur_ResponseCue_Go_MinimumStay = 0.200;                      % after, do Smiley
+        p.dur_ResponseCue_Smiley         = 0.100;                      % feedback
+
+        p.dur_InterTrailInterval         = 6.000 + [-0.500 +0.500];
+
+    case 'mouse'
+
+        % all dur* are in seconds
+        p.dur_ActionSelection            = 2.300 + [-0.500 +0.500];
+
+        p.dur_FixationPeriod_MinimumStay = 0.300; % gaze
+        p.dur_FixationPeriod_Maximum     = 0.500 + [-0.100 +0.100]; % got to next trial
+
+        p.dur_TargetAppearance           = 0.500 + [-0.100 +0.100];
+
+        p.dur_ResponseCue_Maximum        = 1.500;                      % after, do Smiley HAPPY / BAD
+        p.dur_ResponseCue_No_MinimumStay = p.dur_ResponseCue_Maximum ; % after, do smiley
+        p.dur_ResponseCue_Go_MinimumStay = 0.200;                      % after, do Smiley
+        p.dur_ResponseCue_Smiley         = 0.100;                      % feedback
+
+        p.dur_InterTrailInterval         = 6.000 + [-0.500 +0.500];
+
+    otherwise
+        error('input method ?')
+
+end
 
 %% Debugging
 
@@ -89,14 +115,14 @@ fields = fieldnames(p);
 
 for f = 1 : length(fields)
     field = fields{f};
-    
+
     if length(field)>=4 && strcmp(field(1:4), 'dur_')
         if isvector(p.(field)) && length(p.(field)) == 2
             min_max = p.(field);
             p.jitters.(field) = Shuffle(linspace(min_max(1),min_max(2), p.nTrial));
         end
     end
-    
+
 end
 
 

@@ -5,7 +5,7 @@ try
     %% Tuning of the task
 
     TASK.Keybindings();
-    [ EP, p ] = TASK.GoNogo.Parameters( S.OperationMode );
+    [ EP, p ] = TASK.GoNogo.Parameters( S.OperationMode, S.InputMehtod );
 
 
     %% Prepare recorders
@@ -75,6 +75,10 @@ try
                 Screen('DrawingFinished', wPtr);
                 Screen('Flip',wPtr);
 
+                if strcmp(SAURON.type, 'mouse')
+                    SetMouse( SAURON.screen_x/2, SAURON.screen_y/2, SAURON.wPtr )
+                end
+
                 StartTime = PTB_ENGINE.StartTimeEvent(); % a wrapper, deals with hidemouse, eyelink, mri sync, ...
                 SAURON.starttime = StartTime;
 
@@ -102,7 +106,6 @@ try
                 frame_counter = 0;
                 next_onset = +Inf;
 
-
                 while secs < next_event
 
                     [keyIsDown, secs, keyCode] = KbCheck();
@@ -112,13 +115,12 @@ try
                     end
                     frame_counter = frame_counter + 1;
 
-                    SAURON.Update();
+                    [gaze_x, gaze_y] = SAURON.Update();
 
                     switch state
 
                         case 'ActionSelection' %---------------------------
 
-                            % Draw
                             WALL_E.DrawFrameSquare('white');
                             WALL_E.DrawImage(direction);
 
@@ -130,18 +132,30 @@ try
 
                         case 'FixationPeriod' %----------------------------
 
-                            % Draw
                             WALL_E.DrawFrameSquare('white');
 
                             if frame_counter == 1
-                                next_state = 'TargetAppearance';
+                                next_state = 'IntertrialInterval';
+                                fixation_duration = 0;
                             elseif frame_counter == 2
                                 next_onset = state_onset + p.jitters.dur_FixationPeriod_Maximum(evt_iTrial);
                             end
 
+                            if IsInRect(gaze_x, gaze_y, WALL_E.frameRect)
+                                fixation_duration = fixation_duration + S.PTB.Video.IFI;
+
+                                if fixation_duration >= p.dur_FixationPeriod_MinimumStay
+                                    state = 'TargetAppearance';
+                                    fixation_duration = 0;
+                                    frame_counter = 0;
+                                end
+
+                            else
+                                fixation_duration = 0;
+                            end
+
                         case 'TargetAppearance' %--------------------------
 
-                            % Draw
                             WALL_E.DrawFillSquare('white');
                             EVE.DrawFillCircle('up');
                             EVE.DrawFillCircle('right');
@@ -154,17 +168,80 @@ try
 
                         case 'ResponseCue' %-------------------------------
 
-                            % Draw
+                            EVE.DrawFillCircle('up');
+                            EVE.DrawFillCircle('right');
+                            switch condition
+                                case 'go'
+                                    WALL_E.DrawFillSquare('green')
+                                case 'no'
+                                    WALL_E.DrawFillSquare('red')
+                            end
 
                             if frame_counter == 1
-                                next_state = 'Feeback';
+                                next_state = 'Feedback';
+                                fixation_duration = 0;
+                                smiley = 'sad'; % default value
                             elseif frame_counter == 2
                                 next_onset = state_onset + p.dur_ResponseCue_Maximum ;
                             end
 
-                        case 'Feeback' %-----------------------------------
+                            switch condition
+                                case 'go'
 
-                            % Draw
+                                    switch direction
+                                        case 'free'
+                                            isinrect = ...
+                                                IsInRect(gaze_x, gaze_y, EVE.rect.up   ) + ...
+                                                IsInRect(gaze_x, gaze_y, EVE.rect.right);
+                                        otherwise
+                                            isinrect = IsInRect(gaze_x, gaze_y, EVE.rect.(direction));
+                                    end
+
+                                    if isinrect
+                                        fixation_duration = fixation_duration + S.PTB.Video.IFI;
+
+                                        if fixation_duration >= p.dur_ResponseCue_Go_MinimumStay
+                                            state = 'Feedback';
+                                            smiley = 'happy';
+                                            fixation_duration = 0;
+                                            frame_counter = 0;
+                                        end
+
+                                    else
+                                        fixation_duration = 0;
+                                    end
+
+                                case 'no'
+                                    if IsInRect(gaze_x, gaze_y, WALL_E.frameRect)
+                                        fixation_duration = fixation_duration + S.PTB.Video.IFI;
+
+                                        if fixation_duration >= p.dur_ResponseCue_No_MinimumStay
+                                            state = 'Feedback';
+                                            smiley = 'happy';
+                                            fixation_duration = 0;
+                                            frame_counter = 0;
+                                        end
+
+                                    else
+                                        fixation_duration = 0;
+                                    end
+                            end
+
+                        case 'Feedback' %-----------------------------------
+
+                            switch condition
+                                case 'go'
+                                    WALL_E.DrawFillSquare('green')
+                                case 'no'
+                                    WALL_E.DrawFillSquare('red')
+                            end
+                            switch direction
+                                case 'free'
+                                    EVE.DrawImage(smiley, 'up')
+                                    EVE.DrawImage(smiley, 'right')
+                                otherwise
+                                    EVE.DrawImage(smiley, direction)
+                            end
 
                             if frame_counter == 1
                                 next_state = 'IntertrialInterval';
@@ -174,7 +251,6 @@ try
 
                         case 'IntertrialInterval' %------------------------
 
-                            % Draw
                             FIXATIONCROSS.Draw();
 
                             if frame_counter == 1
@@ -185,9 +261,9 @@ try
 
                         otherwise %----------------------------------------
                             error('state ?')
-                            
+
                     end
-                    
+
                     if S.Show
                         SAURON.Draw();
                     end
@@ -198,7 +274,7 @@ try
                     if frame_counter == 1
                         state_onset = flip_onset;
                     end
-                    
+
                     if frame_counter > 2  &&  (flip_onset + slack >= next_onset)
                         state = next_state;
                         frame_counter = 0;
@@ -207,8 +283,8 @@ try
                     if isempty(state)
                         break
                     end
-                    
-                    
+
+
                 end % while
 
             otherwise % ---------------------------------------------------
