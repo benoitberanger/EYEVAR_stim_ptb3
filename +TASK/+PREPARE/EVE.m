@@ -33,6 +33,8 @@ eve.img.sad.mask = 'NoMask';
 eve.img.sad.scale = eve.va2pix * S.TaskParam.EVE.dim / eve.img.sad.baseRect(4);
 eve.img.sad.MakeTexture();
 
+eve.GenRect();
+
 eve.AssertReady();
 
 end % function

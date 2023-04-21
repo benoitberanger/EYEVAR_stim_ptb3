@@ -1,4 +1,4 @@
-function DrawRect(self, color)
+function DrawFillSquare(self, color)
 
 Screen('FillRect', self.wPtr, self.color.(color), self.frameRect);
 

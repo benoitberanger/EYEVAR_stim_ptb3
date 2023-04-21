@@ -1,4 +1,4 @@
-function Draw(self, categ, pos)
+function DrawImage(self, categ, pos)
 
 switch categ
     case 'happy'
@@ -25,4 +25,4 @@ end
 img.Move(center);
 img.Draw();
 
-end % 
+end % function

@@ -60,6 +60,8 @@ p.dur_InterTrailInterval         = 6.000 + [-0.500 +0.500];
 switch OperationMode
     case 'FastDebug'
         p.nRep = 1;
+        p.dur_ActionSelection    = 0.500 + [-0.500 +0.500];
+        p.dur_InterTrailInterval = 0.500 + [-0.500 +0.500];
     case 'RealisticDebug'
         p.nRep = 1;
     case 'Acquisition'
@@ -82,6 +84,23 @@ p = TASK.Graphics( p );
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 p.nTrial = sum(cell2mat(p.Conditions(:,3))) * p.nRep;
+
+
+%% Jitters
+
+fields = fieldnames(p);
+
+for f = 1 : length(fields)
+    field = fields{f};
+    
+    if length(field)>=4 && strcmp(field(1:4), 'dur_')
+        if isvector(p.(field)) && length(p.(field)) == 2
+            min_max = p.(field);
+            p.jitters.(field) = Shuffle(linspace(min_max(1),min_max(2), p.nTrial));
+        end
+    end
+    
+end
 
 
 %% Build planning

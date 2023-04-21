@@ -58,7 +58,7 @@ else % Create the figure
     %% Panel proportions
     
     % relative proportions of each panel, from bottom to top
-    PANEL = GUI.VIEW.PanelDispatcher( [0.5 0.75 1.5 1 0.75 0.75 1.5 ] );
+    PANEL = GUI.VIEW.PanelDispatcher( [0.5 0.75 1.5 1 0.75 0.75 0.75 1.5 ] );
     
     
     %% Panel : Subject & Run
@@ -181,7 +181,7 @@ else % Create the figure
         'Position',[p_sm.x p_sm.y p_sm.w p_sm.h],...
         'BackgroundColor',figureBGcolor);
     
-    o_sm = GUI.VIEW.ObjectDispatcher( [1 1] , 0.25 );
+    o_sm = GUI.VIEW.ObjectDispatcher( [1 1] , 0.20 );
     
     % ---------------------------------------------------------------------
     % RadioButton : Save Data
@@ -276,6 +276,61 @@ else % Create the figure
         'String','Mouse',...
         'HorizontalAlignment','Center',...
         'Tag',r_mouse.tag,...
+        'BackgroundColor',figureBGcolor);
+    
+    
+    %% Panel : Show gaze, yes or no ?
+    
+    p_show.x = PANEL.x_pos;
+    p_show.w = PANEL.x_width;
+    
+    PANEL.next();
+    p_show.y = PANEL.y_pos;
+    p_show.h = PANEL.y_height;
+    
+    handles.uipanel_ShowGaze = uibuttongroup(handles.(gui_name),...
+        'Title','Show cursor',...
+        'Units', 'Normalized',...
+        'Position',[p_show.x p_show.y p_show.w p_show.h],...
+        'BackgroundColor',figureBGcolor);
+    
+    o_env = GUI.VIEW.ObjectDispatcher( [1 1] , 0.20 );
+    
+    % ---------------------------------------------------------------------
+    % RadioButton : show::no
+    
+    o_env.next();
+    r_show_no.x   = o_env.xpos;
+    r_show_no.y   = 0.1 ;
+    r_show_no.w   = o_env.xwidth;
+    r_show_no.h   = 0.8;
+    r_show_no.tag = 'radiobutton_show_0';
+    handles.(r_show_no.tag) = uicontrol(handles.uipanel_ShowGaze,...
+        'Style','radiobutton',...
+        'Units', 'Normalized',...
+        'Position',[r_show_no.x r_show_no.y r_show_no.w r_show_no.h],...
+        'String','No',...
+        'HorizontalAlignment','Center',...
+        'Tag',r_show_no.tag,...
+        'BackgroundColor',figureBGcolor);
+    
+    
+    % ---------------------------------------------------------------------
+    % RadioButton : show::yes
+    
+    o_env.next();
+    r_show_yes.x   = o_env.xpos;
+    r_show_yes.y   = 0.1 ;
+    r_show_yes.w   = o_env.xwidth;
+    r_show_yes.h   = 0.8;
+    r_show_yes.tag = 'radiobutton_show_1';
+    handles.(r_show_yes.tag) = uicontrol(handles.uipanel_ShowGaze,...
+        'Style','radiobutton',...
+        'Units', 'Normalized',...
+        'Position',[r_show_yes.x r_show_yes.y r_show_yes.w r_show_yes.h],...
+        'String','Yes',...
+        'HorizontalAlignment','Center',...
+        'Tag',r_show_yes.tag,...
         'BackgroundColor',figureBGcolor);
     
     

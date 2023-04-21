@@ -19,7 +19,8 @@ try
     FIXATIONCROSS = TASK.PREPARE.FixationCross();
     WALL_E        = TASK.PREPARE.WALL_E();
     EVE           = TASK.PREPARE.EVE(WALL_E);
-
+    SAURON        = TASK.PREPARE.SAURON();
+    
 
     %% Shortcuts
 
@@ -110,10 +111,8 @@ try
 
                 if S.MovieMode, PTB_ENGINE.VIDEO.MOVIE.AddFrameFrontBuffer(wPtr,moviePtr, round(evt_duration/S.PTB.Video.IFI)); end
 
-                
-
                 % While loop for most of the duration of the event, so we can press ESCAPE
-                next_onset = StartTime + next_evt_onset - slack;
+                next_onset = real_onset + p.jitters.dur_ActionSelection(evt_iTrial) - slack;
                 while secs < next_onset
 
                     [keyIsDown, secs, keyCode] = KbCheck();
@@ -123,6 +122,56 @@ try
                     end
 
                 end % while
+
+
+                %----------------------------------------------------------
+                % Fixation Period
+                %----------------------------------------------------------
+
+                % Draw
+                WALL_E.DrawFrame('white');
+                Screen('DrawingFinished', wPtr);
+                
+                % Flip at the right moment
+                desired_onset =  next_onset;
+                real_onset = Screen('Flip', wPtr, desired_onset);
+                
+                % While loop for most of the duration of the event, so we can press ESCAPE
+                next_onset = real_onset + p.jitters.dur_FixationPeriod_Maximum(evt_iTrial) - slack;
+                is_fixating = false;
+                fixtion_done = false;
+                onset_fixation = 0;
+                dur_fixation = 0;
+                while secs < next_onset
+
+                    [keyIsDown, secs, keyCode] = KbCheck();
+                    if keyIsDown
+                        EXIT = keyCode(KEY_ESCAPE);
+                        if EXIT, break, end
+                    end
+                    
+                    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                    % code for the input : gazz or mouse
+                    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                    
+                    
+                    if is_fixating
+                        if ~dur_fixation
+                            onset_fixation = secs;
+                        end
+                        dur_fixation = secs - onset_fixation
+                        if dur_fixation >= p.dur_FixationPeriod_MinimumStay
+                            fixtion_done = true;
+                            fprintf('fixation dur reached \n')
+                            break
+                        end
+                    end
+
+                end % while
+                
+                if ~fixtion_done
+                    fprintf('fixation NOT reached \n')
+                end
 
             otherwise % ---------------------------------------------------
 
