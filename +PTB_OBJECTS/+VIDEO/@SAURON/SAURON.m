@@ -7,13 +7,16 @@ classdef SAURON < PTB_OBJECTS.VIDEO.Base
 
         % Parameters
 
-        type   (1,:) char                                                  % name of the input method
-
+        type      (1,:) char                                               % name of the input method
+        
+        starttime (1,1) double = GetSecs()                                 % PTB timestamp
+        
         % Internal variables
 
-        rec    (1,1) SampleRecorder
-        gaze_x (1,1) double
-        gaze_y (1,1) double
+        rec       (1,1) SampleRecorder
+
+        gaze_x    (1,1) double                                             % last recorded value
+        gaze_y    (1,1) double
 
     end % properties
 
@@ -28,8 +31,6 @@ classdef SAURON < PTB_OBJECTS.VIDEO.Base
         % no constructor, easier to manage and just fill the fields
 
     end % methods
-
-
 
 
 end % classef

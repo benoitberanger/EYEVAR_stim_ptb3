@@ -11,7 +11,7 @@ try
     %% Prepare recorders
 
     PTB_ENGINE.PrepareRecorders( S.EP );
-    %     S.BR = EventRecorder({'block#' 'block_name' 'trial#' 'content' 'target(L/R)' 'RT(s)' 'side(L/R)' 'ok'}, 1);
+    S.BR = EventRecorder({''}, 1);
 
 
     %% Initialize stim objects
@@ -20,12 +20,14 @@ try
     WALL_E        = TASK.PREPARE.WALL_E();
     EVE           = TASK.PREPARE.EVE(WALL_E);
     SAURON        = TASK.PREPARE.SAURON();
-    
+
 
     %% Shortcuts
 
     ER          = S.ER; % EventRecorder
-    %     BR          = S.BR; % BehaviourRecorder (EventRecorder)
+    BR          = S.BR; % BehaviourRecorder (EventRecorder)
+    SR          = SAURON.rec;
+    S.SR        = SR;
     wPtr        = S.PTB.Video.wPtr;
     wRect       = S.PTB.Video.wRect;
     slack       = S.PTB.Video.slack;
@@ -74,6 +76,7 @@ try
                 Screen('Flip',wPtr);
 
                 StartTime = PTB_ENGINE.StartTimeEvent(); % a wrapper, deals with hidemouse, eyelink, mri sync, ...
+                SAURON.starttime = StartTime;
 
 
             case 'StopTime' % ---------------------------------------------
@@ -89,89 +92,120 @@ try
                 res = strsplit(evt_name,'_');
                 condition = res{2};
                 direction = res{1};
+                next_event = StartTime + next_evt_onset - slack;
 
-                %----------------------------------------------------------
-                % Action Selection
-                %----------------------------------------------------------
-                
-                % Draw
-                WALL_E.DrawFrame('white');
-                WALL_E.img.(direction).Draw();
-                Screen('DrawingFinished', wPtr);
-
-                % Flip at the right moment
-                desired_onset =  StartTime + evt_onset - slack;
-                real_onset = Screen('Flip', wPtr, desired_onset);
-                
+                % log
                 fprintf('trial=%3d // block=%2d // idx=%1d // direction=%5s // condition=%2s \n', ...
                     evt_iTrial, evt_iBlock, evt_idx, direction, condition)
-                
-                % Save onset
-                ER.AddEvent({evt_name real_onset-StartTime [] EP.Data{evt, 4:end}});
 
-                if S.MovieMode, PTB_ENGINE.VIDEO.MOVIE.AddFrameFrontBuffer(wPtr,moviePtr, round(evt_duration/S.PTB.Video.IFI)); end
+                state = 'ActionSelection';
+                frame_counter = 0;
+                next_onset = +Inf;
 
-                % While loop for most of the duration of the event, so we can press ESCAPE
-                next_onset = real_onset + p.jitters.dur_ActionSelection(evt_iTrial) - slack;
-                while secs < next_onset
+
+                while secs < next_event
 
                     [keyIsDown, secs, keyCode] = KbCheck();
                     if keyIsDown
                         EXIT = keyCode(KEY_ESCAPE);
                         if EXIT, break, end
                     end
+                    frame_counter = frame_counter + 1;
 
-                end % while
+                    [gaze_x,gaze_y] = SAURON.GetSample();
 
+                    switch state
 
-                %----------------------------------------------------------
-                % Fixation Period
-                %----------------------------------------------------------
+                        case 'ActionSelection' %---------------------------
 
-                % Draw
-                WALL_E.DrawFrame('white');
-                Screen('DrawingFinished', wPtr);
-                
-                % Flip at the right moment
-                desired_onset =  next_onset;
-                real_onset = Screen('Flip', wPtr, desired_onset);
-                
-                % While loop for most of the duration of the event, so we can press ESCAPE
-                next_onset = real_onset + p.jitters.dur_FixationPeriod_Maximum(evt_iTrial) - slack;
-                is_fixating = false;
-                fixtion_done = false;
-                onset_fixation = 0;
-                dur_fixation = 0;
-                while secs < next_onset
+                            % Draw
+                            WALL_E.DrawFrameSquare('white');
+                            WALL_E.DrawImage(direction);
 
-                    [keyIsDown, secs, keyCode] = KbCheck();
-                    if keyIsDown
-                        EXIT = keyCode(KEY_ESCAPE);
-                        if EXIT, break, end
+                            if frame_counter == 1
+                                next_state = 'FixationPeriod';
+                            elseif frame_counter == 2
+                                next_onset = state_onset + p.jitters.dur_ActionSelection(evt_iTrial);
+                            end
+
+                        case 'FixationPeriod' %----------------------------
+
+                            % Draw
+                            WALL_E.DrawFrameSquare('white');
+
+                            if frame_counter == 1
+                                next_state = 'TargetAppearance';
+                            elseif frame_counter == 2
+                                next_onset = state_onset + p.jitters.dur_FixationPeriod_Maximum(evt_iTrial);
+                            end
+
+                        case 'TargetAppearance' %--------------------------
+
+                            % Draw
+                            WALL_E.DrawFillSquare('white');
+                            EVE.DrawFillCircle('up');
+                            EVE.DrawFillCircle('right');
+
+                            if frame_counter == 1
+                                next_state = 'ResponseCue';
+                            elseif frame_counter == 2
+                                next_onset = state_onset + p.jitters.dur_TargetAppearance(evt_iTrial);
+                            end
+
+                        case 'ResponseCue' %-------------------------------
+
+                            % Draw
+
+                            if frame_counter == 1
+                                next_state = 'Feeback';
+                            elseif frame_counter == 2
+                                next_onset = state_onset + p.dur_ResponseCue_Maximum ;
+                            end
+
+                        case 'Feeback' %-----------------------------------
+
+                            % Draw
+
+                            if frame_counter == 1
+                                next_state = 'IntertrialInterval';
+                            elseif frame_counter == 2
+                                next_onset = state_onset + p.dur_ResponseCue_Smiley;
+                            end
+
+                        case 'IntertrialInterval' %------------------------
+
+                            % Draw
+                            FIXATIONCROSS.Draw();
+
+                            if frame_counter == 1
+                                next_state = '';
+                            elseif frame_counter == 2
+                                next_onset = state_onset + p.jitters.dur_InterTrailInterval(evt_iTrial);
+                            end
+
+                        otherwise %----------------------------------------
+                            error('state ?')
+                            
+                    end
+
+                    Screen('DrawingFinished', wPtr);
+                    flip_onset = Screen('Flip', wPtr);
+
+                    if frame_counter == 1
+                        state_onset = flip_onset;
                     end
                     
-                    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-                    % code for the input : gazz or mouse
-                    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-                    
-                    
-                    if is_fixating
-                        if ~dur_fixation
-                            onset_fixation = secs;
-                        end
-                        dur_fixation = secs - onset_fixation
-                        if dur_fixation >= p.dur_FixationPeriod_MinimumStay
-                            fixtion_done = true;
-                            fprintf('fixation dur reached \n')
-                            break
-                        end
+                    if frame_counter > 2  &&  (flip_onset + slack >= next_onset)
+                        state = next_state;
+                        frame_counter = 0;
                     end
 
+                    if isempty(state)
+                        break
+                    end
+                    
+                    
                 end % while
-                
-                if ~fixtion_done
-                    fprintf('fixation NOT reached \n')
-                end
 
             otherwise % ---------------------------------------------------
 

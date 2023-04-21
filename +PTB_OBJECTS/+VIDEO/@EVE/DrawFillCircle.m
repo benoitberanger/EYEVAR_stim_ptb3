@@ -1,4 +1,4 @@
-function DrawFillOval(self, pos)
+function DrawFillCurcle(self, pos)
 
 Screen('FillOval', self.wPtr, self.color.yellow, self.rect.(pos))
 
