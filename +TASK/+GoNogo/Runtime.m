@@ -156,8 +156,8 @@ try
                         case 'TargetAppearance' %--------------------------
 
                             WALL_E.DrawFillSquare('white');
-                            EVE.DrawFillCircle('up');
-                            EVE.DrawFillCircle('right');
+                            EVE.DrawFillSquare('down');
+                            EVE.DrawFillSquare('right');
 
                             if frame_counter == 1
                                 next_state = 'ResponseCue';
@@ -167,8 +167,8 @@ try
 
                         case 'ResponseCue' %-------------------------------
 
-                            EVE.DrawFillCircle('up');
-                            EVE.DrawFillCircle('right');
+                            EVE.DrawFillSquare('down');
+                            EVE.DrawFillSquare('right');
                             switch condition
                                 case 'go'
                                     WALL_E.DrawFillSquare('green')
@@ -190,7 +190,7 @@ try
                                     switch direction
                                         case 'free'
                                             isinrect = ...
-                                                IsInRect(gaze_x, gaze_y, EVE.rect.up   ) + ...
+                                                IsInRect(gaze_x, gaze_y, EVE.rect.down   ) + ...
                                                 IsInRect(gaze_x, gaze_y, EVE.rect.right);
                                         otherwise
                                             isinrect = IsInRect(gaze_x, gaze_y, EVE.rect.(direction));
@@ -236,7 +236,7 @@ try
                             end
                             switch direction
                                 case 'free'
-                                    EVE.DrawImage(smiley, 'up')
+                                    EVE.DrawImage(smiley, 'down')
                                     EVE.DrawImage(smiley, 'right')
                                 otherwise
                                     EVE.DrawImage(smiley, direction)

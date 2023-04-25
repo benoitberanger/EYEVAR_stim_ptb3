@@ -21,8 +21,8 @@ p.Conditions = {
     'free'  'no' 1
     'right' 'go' 1
     'right' 'no' 1
-    'up'    'go' 1
-    'up'    'no' 1
+    'down'  'go' 1
+    'down'  'no' 1
     };
 
 p.nRep = 40;
