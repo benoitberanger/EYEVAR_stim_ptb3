@@ -19,10 +19,10 @@ p = struct; % This structure will contain all task specific parameters, such as 
 p.Conditions = {
     'free'  'go' 1
     'free'  'no' 1
-%     'right' 'go' 1
-%     'right' 'no' 1
-%     'down'  'go' 1
-%     'down'  'no' 1
+    'right' 'go' 1
+    'right' 'no' 1
+    'down'  'go' 1
+    'down'  'no' 1
     };
 
 p.nRep = 40;
@@ -52,7 +52,8 @@ switch InputMethod
         p.dur_ResponseCue_Maximum        = 0.700;                      % after, do Smiley HAPPY / BAD
         p.dur_ResponseCue_No_MinimumStay = p.dur_ResponseCue_Maximum ; % after, do smiley
         p.dur_ResponseCue_Go_MinimumStay = 0.200;                      % after, do Smiley
-        p.dur_ResponseCue_Smiley         = 0.100;                      % feedback
+        
+        p.dur_Feedback                   = 0.100;                      % smeily display duration
 
         p.dur_InterTrailInterval         = 6.000 + [-0.500 +0.500];
 
@@ -69,7 +70,8 @@ switch InputMethod
         p.dur_ResponseCue_Maximum        = 1.500;                      % after, do Smiley HAPPY / BAD
         p.dur_ResponseCue_No_MinimumStay = p.dur_ResponseCue_Maximum ; % after, do smiley
         p.dur_ResponseCue_Go_MinimumStay = 0.200;                      % after, do Smiley
-        p.dur_ResponseCue_Smiley         = 0.100;                      % feedback
+        
+        p.dur_Feedback                   = 0.100;                      % smeily display duration
 
         p.dur_InterTrailInterval         = 6.000 + [-0.500 +0.500];
 

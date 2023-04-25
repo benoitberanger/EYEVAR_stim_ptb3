@@ -259,7 +259,7 @@ try
                             if frame_counter == 1
                                 next_state = 'IntertrialInterval';
                             elseif frame_counter == 2
-                                next_onset = state_onset + p.dur_ResponseCue_Smiley;
+                                next_onset = state_onset + p.dur_Feedback;
                             end
 
                         case 'IntertrialInterval' %------------------------
