@@ -19,10 +19,10 @@ p = struct; % This structure will contain all task specific parameters, such as 
 p.Conditions = {
     'free'  'go' 1
     'free'  'no' 1
-    'right' 'go' 1
-    'right' 'no' 1
-    'down'  'go' 1
-    'down'  'no' 1
+%     'right' 'go' 1
+%     'right' 'no' 1
+%     'down'  'go' 1
+%     'down'  'no' 1
     };
 
 p.nRep = 40;
@@ -47,7 +47,7 @@ switch InputMethod
         p.dur_FixationPeriod_MinimumStay = 0.100; % gaze
         p.dur_FixationPeriod_Maximum     = 0.300 + [-0.100 +0.100]; % got to next trial
 
-        p.dur_TargetAppearance           = 0.500 + [-0.100 +0.100];
+        p.dur_TargetAppearance           = 0.400 + [-0.200 +0.200];
 
         p.dur_ResponseCue_Maximum        = 0.700;                      % after, do Smiley HAPPY / BAD
         p.dur_ResponseCue_No_MinimumStay = p.dur_ResponseCue_Maximum ; % after, do smiley

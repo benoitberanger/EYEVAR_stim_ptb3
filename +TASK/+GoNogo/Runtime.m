@@ -189,9 +189,14 @@ try
 
                                     switch direction
                                         case 'free'
-                                            isinrect = ...
-                                                IsInRect(gaze_x, gaze_y, EVE.rect.down   ) + ...
-                                                IsInRect(gaze_x, gaze_y, EVE.rect.right);
+                                            isinrect_down  = IsInRect(gaze_x, gaze_y, EVE.rect.down  );
+                                            isinrect_right = IsInRect(gaze_x, gaze_y, EVE.rect.right );
+                                            isinrect = isinrect_down + isinrect_right;
+                                            if isinrect_down
+                                                free_direction = 'down';
+                                            elseif isinrect_right
+                                                free_direction = 'right';
+                                            end
                                         otherwise
                                             isinrect = IsInRect(gaze_x, gaze_y, EVE.rect.(direction));
                                     end
@@ -234,15 +239,21 @@ try
                             switch condition
                                 case 'go'
                                     WALL_E.DrawFillSquare('green')
+                                    switch direction
+                                        case 'free'
+                                            EVE.DrawImage(smiley, free_direction)
+                                        otherwise
+                                            EVE.DrawImage(smiley, direction)
+                                    end
                                 case 'no'
                                     WALL_E.DrawFillSquare('red')
-                            end
-                            switch direction
-                                case 'free'
-                                    EVE.DrawImage(smiley, 'down')
-                                    EVE.DrawImage(smiley, 'right')
-                                otherwise
-                                    EVE.DrawImage(smiley, direction)
+                                    switch direction
+                                        case 'free'
+                                            EVE.DrawImage(smiley, 'down')
+                                            EVE.DrawImage(smiley, 'right')
+                                        otherwise
+                                            EVE.DrawImage(smiley, direction)
+                                    end
                             end
 
                             if frame_counter == 1
