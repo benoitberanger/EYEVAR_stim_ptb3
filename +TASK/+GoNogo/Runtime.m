@@ -84,7 +84,7 @@ try
 
             case 'StopTime' % ---------------------------------------------
 
-                StopTime = WaitSecs('UntilTime', StartTime + S.ER.Data{S.ER.EventCount,2} + S.EP.Data{evt-1,3} );
+                StopTime = GetSecs();
 
                 % Record StopTime
                 S.ER.AddStopTime( 'StopTime' , StopTime - StartTime );
@@ -205,9 +205,12 @@ try
                                             fixation_duration = 0;
                                             frame_counter = 0;
                                         end
+                                    end
 
-                                    else
+                                    if fixation_duration > 0 && ~isinrect
+                                        state = 'IntertrialInterval';
                                         fixation_duration = 0;
+                                        frame_counter = 0;
                                     end
 
                                 case 'no'
@@ -272,10 +275,10 @@ try
 
                     if frame_counter == 1
                         state_onset = flip_onset;
-                        
+
                         % logs
                         fprintf('state = %s \n', state)
-                        
+
                         % save trial onset
                         if strcmp(state, 'ActionSelection')
                             ER.AddEvent({evt_name state_onset-StartTime [] EP.Data{evt, 4:end}})
