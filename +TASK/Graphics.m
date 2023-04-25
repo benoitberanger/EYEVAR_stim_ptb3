@@ -33,7 +33,8 @@ p.WALL_E.img.dim        = (p.WALL_E.dim - p.WALL_E.width) * 0.9;           % ima
 %% EVE (common)
 
 p.EVE.dim               = p.WALL_E.dim;                                    % size of rect/cicle, in VA
-p.EVE.excentricity      = 6.0;                                             % distance from WALL_E, in VA
+p.EVE.excentricity_lr   = 10.0;                                             % distance from WALL_E, in VA
+p.EVE.excentricity_ud   = 05.0;                                             % distance from WALL_E, in VA
 p.EVE.color.yellow      = p.WALL_E.color.yellow;                           % [R G B a] from 0 to 255
 p.EVE.img.happy         = 'img/smiley_happy_96px.png';
 p.EVE.img.sad           = 'img/smiley_sad_96px.png';

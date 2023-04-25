@@ -9,9 +9,10 @@ eve.va2pix   = S.PTB.Video.va2pix;
 
 eve.wall_e = wall_e;
 
-eve.dim           = S.TaskParam.EVE.dim;
-eve.excentricity  = S.TaskParam.EVE.excentricity;
-eve.color.yellow  = S.TaskParam.EVE.color.yellow;
+eve.dim              = S.TaskParam.EVE.dim;
+eve.excentricity_lr  = S.TaskParam.EVE.excentricity_lr;
+eve.excentricity_ud  = S.TaskParam.EVE.excentricity_ud;
+eve.color.yellow     = S.TaskParam.EVE.color.yellow;
 
 eve.GenCenter();
 

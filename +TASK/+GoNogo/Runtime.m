@@ -48,7 +48,6 @@ try
 
     EXIT = false;
     secs = GetSecs();
-    n_resp_ok = 0;
 
     % Loop over the EventPlanning
     nEvents = size( EP.Data , 1 );
@@ -273,6 +272,14 @@ try
 
                     if frame_counter == 1
                         state_onset = flip_onset;
+                        
+                        % logs
+                        fprintf('state = %s \n', state)
+                        
+                        % save trial onset
+                        if strcmp(state, 'ActionSelection')
+                            ER.AddEvent({evt_name state_onset-StartTime [] EP.Data{evt, 4:end}})
+                        end
                     end
 
                     if frame_counter > 2  &&  (flip_onset + slack >= next_onset)
