@@ -134,7 +134,7 @@ try
                             WALL_E.DrawFrameSquare('white');
 
                             if frame_counter == 1
-                                next_state = 'IntertrialInterval';
+                                next_state = 'InterTrialInterval';
                                 fixation_duration = 0;
                             elseif frame_counter == 2
                                 next_onset = state_onset + p.jitters.dur_FixationPeriod_Maximum(evt_iTrial);
@@ -181,7 +181,7 @@ try
                                 fixation_duration = 0;
                                 smiley = 'sad'; % default value
                             elseif frame_counter == 2
-                                next_onset = state_onset + p.dur_ResponseCue_Maximum ;
+                                next_onset = state_onset + p.dur_ResponseCue_Maximum;
                             end
 
                             switch condition
@@ -196,6 +196,8 @@ try
                                                 free_direction = 'down';
                                             elseif isinrect_right
                                                 free_direction = 'right';
+                                            else
+                                                free_direction = {'down','right'};
                                             end
                                         otherwise
                                             isinrect = IsInRect(gaze_x, gaze_y, EVE.rect.(direction));
@@ -212,8 +214,13 @@ try
                                         end
                                     end
 
-                                    if fixation_duration > 0 && ~isinrect
-                                        state = 'IntertrialInterval';
+                                    if fixation_duration > 0 && ~isinrect % in the target, then out -> FAIL
+                                        state = 'InterTrialInterval';
+                                        fixation_duration = 0;
+                                        frame_counter = 0;
+                                    elseif frame_counter > 2 && fixation_duration == 0 && (next_onset-flip_onset) < p.dur_ResponseCue_Go_MinimumStay % no time left to reach the target
+                                        state = 'Feedback';
+                                        smiley = 'sad';
                                         fixation_duration = 0;
                                         frame_counter = 0;
                                     end
@@ -241,7 +248,11 @@ try
                                     WALL_E.DrawFillSquare('green')
                                     switch direction
                                         case 'free'
-                                            EVE.DrawImage(smiley, free_direction)
+                                            if iscellstr(free_direction) %#ok<ISCLSTR> 
+                                                for d = 1 : length(free_direction)
+                                                    EVE.DrawImage(smiley, free_direction{d})
+                                                end
+                                            end
                                         otherwise
                                             EVE.DrawImage(smiley, direction)
                                     end
@@ -257,12 +268,12 @@ try
                             end
 
                             if frame_counter == 1
-                                next_state = 'IntertrialInterval';
+                                next_state = 'InterTrialInterval';
                             elseif frame_counter == 2
                                 next_onset = state_onset + p.dur_Feedback;
                             end
 
-                        case 'IntertrialInterval' %------------------------
+                        case 'InterTrialInterval' %------------------------
 
                             FIXATIONCROSS.Draw();
 

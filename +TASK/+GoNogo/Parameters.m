@@ -25,7 +25,7 @@ p.Conditions = {
     'down'  'no' 1
     };
 
-p.nRep = 40;
+p.nRep = 10;
 
 % % experimentor will choose DOWN or RIGHT
 % p.Conditions = {
@@ -49,11 +49,12 @@ switch InputMethod
 
         p.dur_TargetAppearance           = 0.400 + [-0.200 +0.200];
 
-        p.dur_ResponseCue_Maximum        = 0.700;                      % after, do Smiley HAPPY / BAD
-        p.dur_ResponseCue_No_MinimumStay = p.dur_ResponseCue_Maximum ; % after, do smiley
-        p.dur_ResponseCue_Go_MinimumStay = 0.200;                      % after, do Smiley
-        
-        p.dur_Feedback                   = 0.100;                      % smeily display duration
+
+        p.dur_ResponseCue_Maximum        = 0.700;
+        p.dur_ResponseCue_No_MinimumStay = p.dur_ResponseCue_Maximum ;
+        p.dur_ResponseCue_Go_MinimumStay = 0.200;
+
+        p.dur_Feedback                   = 0.100;                      % smiley display duration
 
         p.dur_InterTrailInterval         = 6.000 + [-0.500 +0.500];
 
@@ -67,11 +68,11 @@ switch InputMethod
 
         p.dur_TargetAppearance           = 0.500 + [-0.100 +0.100];
 
-        p.dur_ResponseCue_Maximum        = 1.500;                      % after, do Smiley HAPPY / BAD
-        p.dur_ResponseCue_No_MinimumStay = p.dur_ResponseCue_Maximum ; % after, do smiley
-        p.dur_ResponseCue_Go_MinimumStay = 0.200;                      % after, do Smiley
-        
-        p.dur_Feedback                   = 0.100;                      % smeily display duration
+        p.dur_ResponseCue_Maximum        = 1.500;
+        p.dur_ResponseCue_No_MinimumStay = p.dur_ResponseCue_Maximum ;
+        p.dur_ResponseCue_Go_MinimumStay = 0.200;
+
+        p.dur_Feedback                   = 0.100;                      % smiley display duration
 
         p.dur_InterTrailInterval         = 6.000 + [-0.500 +0.500];
 
@@ -151,7 +152,7 @@ for iBlock = 1 : p.nRep
 
     for c = 1 : size(cond,1)
         iTrial = iTrial + 1;
-        EP.AddEvent({ [cond{c,1} '_' cond{c,2}] NextOnset(EP) 12 ...
+        EP.AddEvent({ [cond{c,1} '_' cond{c,2}] NextOnset(EP) 10 ...
             cond{c,1} cond{c,2} iTrial iBlock c})
     end
 
