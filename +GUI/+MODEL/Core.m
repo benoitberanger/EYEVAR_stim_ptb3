@@ -229,7 +229,7 @@ if exist(fullfile('+TASK',['+' S.Task],'SPMnod_parametric.m'),'file') > 0
 end
 
 
-%% MAIN : End recording of Eyelink
+%% Eyelink : stop recording
 
 % Eyelink mode 'On' ?
 if S.EyelinkMode
@@ -237,6 +237,13 @@ if S.EyelinkMode
     % Stop recording and retrieve the file
     Eyelink.StopRecording( S.EyelinkFile )
 
+end
+
+
+%% ParPort : close
+
+if S.ParPort
+    CloseParPort();
 end
 
 

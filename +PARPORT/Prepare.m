@@ -1,7 +1,7 @@
 function [ ParPortMessages ] = Prepare()
 
 % Close if if necessary
-ClosePartPort();
+CloseParPort();
 
 % Open parallel port
 OpenParPort();
