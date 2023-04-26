@@ -259,6 +259,8 @@ set(handles.text_LastFileNameAnnouncer, 'Visible', 'on')
 set(handles.text_LastFileName         , 'Visible', 'on')
 set(handles.text_LastFileName         , 'String' , S.DataFileName)
 
+disp(S.BR.data2table)
+
 WaitSecs(0.100);
 pause(0.100);
 fprintf('\n')

@@ -105,7 +105,7 @@ try
                 frame_counter = 0;
                 next_onset = +Inf;
                 logit = '';
-                gaze_fixed = 0;
+                gaze_fixed = NaN;
                 smiley = ' ';
 
                 while secs < next_event
@@ -321,11 +321,10 @@ try
                         if S.ParPort
                             PARPORT.SendMessage(S, {condition, direction, state})
                         end
+                        
+                        fprintf('%s ', state) % log
 
                         state_onset = flip_onset;
-
-                        % logs
-                        fprintf('%s \n', state)
 
                         % save trial onset
                         if strcmp(state, 'ActionSelection')
@@ -346,10 +345,12 @@ try
                             smiley = ' ';
                         end
                         logit = '';
-                        gaze_fixed = 0;
+                        gaze_fixed = NaN;
                     end
 
                     if isempty(state)
+                        % log
+                        fprintf('\n')
                         break
                     end
 

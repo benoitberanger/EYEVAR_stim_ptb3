@@ -49,7 +49,6 @@ switch InputMethod
 
         p.dur_TargetAppearance           = 0.400 + [-0.200 +0.200];
 
-
         p.dur_ResponseCue_Maximum        = 0.700;
         p.dur_ResponseCue_No_MinimumStay = p.dur_ResponseCue_Maximum ;
         p.dur_ResponseCue_Go_MinimumStay = 0.200;
