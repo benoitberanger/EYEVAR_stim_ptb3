@@ -6,7 +6,7 @@ for m =  1 : length(message)
 end
 
 WriteParPort(value);
-WaitSecs(S.ParPortMessages.duration);
+WaitSecs(S.ParPortMessages.DURATION);
 WriteParPort(0);
 
 end % function

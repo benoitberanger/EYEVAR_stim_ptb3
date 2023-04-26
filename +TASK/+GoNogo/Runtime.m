@@ -308,6 +308,10 @@ try
                     flip_onset = Screen('Flip', wPtr);
 
                     if frame_counter == 1
+                        if S.ParPort
+                            PARPORT.SendMessage(S, {condition, direction, state})
+                        end
+                        
                         state_onset = flip_onset;
 
                         % logs

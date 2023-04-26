@@ -1,5 +1,8 @@
 function [ ParPortMessages ] = Prepare()
 
+% Close if if necessary
+ClosePartPort();
+
 % Open parallel port
 OpenParPort();
 
@@ -9,19 +12,27 @@ WriteParPort(0)
 
 %% Prepare messages
 
-msg.go    = '0 0 0 0   0 0 0 1';
-msg.no    = '0 0 0 0   0 0 1 0';
+msg = struct;
 
-msg.right = '0 0 0 0   0 1 0 0';
-msg.down  = '0 0 0 0   1 0 0 0';
-msg.free  = '0 0 0 0   1 1 0 0';
+msg.go                 = bin2dec('0 0 0 0   0 0 0 1');
+msg.no                 = bin2dec('0 0 0 0   0 0 1 0');
 
+msg.right              = bin2dec('0 0 0 0   0 1 0 0');
+msg.down               = bin2dec('0 0 0 0   1 0 0 0');
+msg.free               = bin2dec('0 0 0 0   1 1 0 0');
+
+msg.ActionSelection    = bin2dec('0 0 0 1   0 0 0 0');
+msg.FixationPeriod     = bin2dec('0 0 1 0   0 0 0 0');
+msg.TargetAppearance   = bin2dec('0 0 1 1   0 0 0 0');
+msg.ResponseCue        = bin2dec('0 1 0 0   0 0 0 0');
+msg.Feedback           = bin2dec('0 1 0 1   0 0 0 0');
+msg.InterTrialInterval = bin2dec('0 1 1 0   0 0 0 0');
 
 
 %% Finalize
 
 % Pulse duration
-msg.duration    = 0.003; % seconds
+msg.DURATION    = 0.003; % seconds
 
 ParPortMessages = msg; % shortcut
 
