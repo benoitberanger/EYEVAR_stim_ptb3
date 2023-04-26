@@ -11,7 +11,7 @@ try
     %% Prepare recorders
 
     PTB_ENGINE.PrepareRecorders( S.EP );
-    S.BR = EventRecorder({'iTrial', 'iBlock', 'idx', 'condition', 'direction', 'state', 'dur_expected', 'dur_real', 'onset'}, p.nTrial * 10);
+    S.BR = EventRecorder({'iTrial', 'iBlock', 'idx', 'condition', 'direction', 'state', 'dur_expected', 'dur_real', 'onset' 'gaze_fixed' 'smiley'}, p.nTrial * 10);
 
 
     %% Initialize stim objects
@@ -105,6 +105,8 @@ try
                 frame_counter = 0;
                 next_onset = +Inf;
                 logit = '';
+                gaze_fixed = 0;
+                smiley = ' ';
 
                 while secs < next_event
 
@@ -147,6 +149,7 @@ try
                                 fixation_duration = fixation_duration + S.PTB.Video.IFI;
 
                                 if fixation_duration >= p.dur_FixationPeriod_MinimumStay
+                                    gaze_fixed = +1;
                                     logit = state;
                                     state = 'TargetAppearance';
                                     fixation_duration = 0;
@@ -184,7 +187,8 @@ try
                             if frame_counter == 1
                                 next_state = 'Feedback';
                                 fixation_duration = 0;
-                                smiley = 'sad'; % default value
+                                gaze_fixed = -1;
+                                smiley = 'sad';
                             elseif frame_counter == 2
                                 dur_expected = p.dur_ResponseCue_Maximum;
                                 next_onset = state_onset + dur_expected;
@@ -213,6 +217,7 @@ try
                                         fixation_duration = fixation_duration + S.PTB.Video.IFI;
 
                                         if fixation_duration >= p.dur_ResponseCue_Go_MinimumStay
+                                            gaze_fixed = +1;
                                             logit = state;
                                             state = 'Feedback';
                                             smiley = 'happy';
@@ -222,11 +227,14 @@ try
                                     end
 
                                     if fixation_duration > 0 && ~isinrect % in the target, then out -> FAIL
+                                        gaze_fixed = -1;
+                                        smiley = ' ';
                                         logit = state;
                                         state = 'InterTrialInterval';
                                         fixation_duration = 0;
                                         frame_counter = 0;
                                     elseif frame_counter > 2 && fixation_duration == 0 && (next_onset-flip_onset) < p.dur_ResponseCue_Go_MinimumStay % no time left to reach the target
+                                        gaze_fixed = -1;
                                         logit = state;
                                         state = 'Feedback';
                                         smiley = 'sad';
@@ -235,10 +243,12 @@ try
                                     end
 
                                 case 'no'
+
                                     if IsInRect(gaze_x, gaze_y, WALL_E.frameRect)
                                         fixation_duration = fixation_duration + S.PTB.Video.IFI;
 
                                         if fixation_duration >= p.dur_ResponseCue_No_MinimumStay
+                                            gaze_fixed = +1;
                                             logit = state;
                                             state = 'Feedback';
                                             smiley = 'happy';
@@ -258,7 +268,7 @@ try
                                     WALL_E.DrawFillSquare('green')
                                     switch direction
                                         case 'free'
-                                            if iscellstr(free_direction) %#ok<ISCLSTR> 
+                                            if iscellstr(free_direction) %#ok<ISCLSTR>
                                                 for d = 1 : length(free_direction)
                                                     EVE.DrawImage(smiley, free_direction{d})
                                                 end
@@ -311,7 +321,7 @@ try
                         if S.ParPort
                             PARPORT.SendMessage(S, {condition, direction, state})
                         end
-                        
+
                         state_onset = flip_onset;
 
                         % logs
@@ -330,11 +340,15 @@ try
                         frame_counter = 0;
                     end
 
-                    if logit 
-                        S.BR.AddEvent({evt_iTrial evt_iBlock evt_idx direction condition logit dur_expected flip_onset-state_onset state_onset-StartTime})
+                    if logit
+                        S.BR.AddEvent({evt_iTrial evt_iBlock evt_idx direction condition logit dur_expected flip_onset-state_onset state_onset-StartTime gaze_fixed smiley})
+                        if strcmp(logit, 'Feedback')
+                            smiley = ' ';
+                        end
                         logit = '';
+                        gaze_fixed = 0;
                     end
-                    
+
                     if isempty(state)
                         break
                     end
@@ -383,20 +397,20 @@ try
         case 'RealisticDebug'
             % plotDelay(EP,ER);
     end
-    
+
     try % I really don't want to this feature to screw a standard task execution
         if exist('moviePtr','var')
             PTB_ENGINE.VIDEO.MOVIE.Finalize(moviePtr);
         end
     catch
     end
-    
-    
+
+
     %% Close PTB textures
-    
+
     WALL_E.CloseTextures();
     EVE.CloseTextures();
-    
+
 
 catch err
 
