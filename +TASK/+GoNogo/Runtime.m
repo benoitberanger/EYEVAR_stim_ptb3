@@ -11,7 +11,7 @@ try
     %% Prepare recorders
 
     PTB_ENGINE.PrepareRecorders( S.EP );
-    S.BR = EventRecorder({''}, 1);
+    S.BR = EventRecorder({'iTrial', 'iBlock', 'idx', 'condition', 'direction', 'state', 'dur_expected', 'dur_real', 'onset'}, p.nTrial * 10);
 
 
     %% Initialize stim objects
@@ -104,6 +104,7 @@ try
                 state = 'ActionSelection';
                 frame_counter = 0;
                 next_onset = +Inf;
+                logit = '';
 
                 while secs < next_event
 
@@ -126,7 +127,8 @@ try
                             if frame_counter == 1
                                 next_state = 'FixationPeriod';
                             elseif frame_counter == 2
-                                next_onset = state_onset + p.jitters.dur_ActionSelection(evt_iTrial);
+                                dur_expected = p.jitters.dur_ActionSelection(evt_iTrial);
+                                next_onset = state_onset + dur_expected;
                             end
 
                         case 'FixationPeriod' %----------------------------
@@ -137,13 +139,15 @@ try
                                 next_state = 'InterTrialInterval';
                                 fixation_duration = 0;
                             elseif frame_counter == 2
-                                next_onset = state_onset + p.jitters.dur_FixationPeriod_Maximum(evt_iTrial);
+                                dur_expected = p.jitters.dur_FixationPeriod_Maximum(evt_iTrial);
+                                next_onset = state_onset + dur_expected;
                             end
 
                             if IsInRect(gaze_x, gaze_y, WALL_E.frameRect)
                                 fixation_duration = fixation_duration + S.PTB.Video.IFI;
 
                                 if fixation_duration >= p.dur_FixationPeriod_MinimumStay
+                                    logit = state;
                                     state = 'TargetAppearance';
                                     fixation_duration = 0;
                                     frame_counter = 0;
@@ -162,7 +166,8 @@ try
                             if frame_counter == 1
                                 next_state = 'ResponseCue';
                             elseif frame_counter == 2
-                                next_onset = state_onset + p.jitters.dur_TargetAppearance(evt_iTrial);
+                                dur_expected = p.jitters.dur_TargetAppearance(evt_iTrial);
+                                next_onset = state_onset + dur_expected;
                             end
 
                         case 'ResponseCue' %-------------------------------
@@ -181,7 +186,8 @@ try
                                 fixation_duration = 0;
                                 smiley = 'sad'; % default value
                             elseif frame_counter == 2
-                                next_onset = state_onset + p.dur_ResponseCue_Maximum;
+                                dur_expected = p.dur_ResponseCue_Maximum;
+                                next_onset = state_onset + dur_expected;
                             end
 
                             switch condition
@@ -207,6 +213,7 @@ try
                                         fixation_duration = fixation_duration + S.PTB.Video.IFI;
 
                                         if fixation_duration >= p.dur_ResponseCue_Go_MinimumStay
+                                            logit = state;
                                             state = 'Feedback';
                                             smiley = 'happy';
                                             fixation_duration = 0;
@@ -215,10 +222,12 @@ try
                                     end
 
                                     if fixation_duration > 0 && ~isinrect % in the target, then out -> FAIL
+                                        logit = state;
                                         state = 'InterTrialInterval';
                                         fixation_duration = 0;
                                         frame_counter = 0;
                                     elseif frame_counter > 2 && fixation_duration == 0 && (next_onset-flip_onset) < p.dur_ResponseCue_Go_MinimumStay % no time left to reach the target
+                                        logit = state;
                                         state = 'Feedback';
                                         smiley = 'sad';
                                         fixation_duration = 0;
@@ -230,6 +239,7 @@ try
                                         fixation_duration = fixation_duration + S.PTB.Video.IFI;
 
                                         if fixation_duration >= p.dur_ResponseCue_No_MinimumStay
+                                            logit = state;
                                             state = 'Feedback';
                                             smiley = 'happy';
                                             fixation_duration = 0;
@@ -270,7 +280,8 @@ try
                             if frame_counter == 1
                                 next_state = 'InterTrialInterval';
                             elseif frame_counter == 2
-                                next_onset = state_onset + p.dur_Feedback;
+                                dur_expected = p.dur_Feedback;
+                                next_onset = state_onset + dur_expected;
                             end
 
                         case 'InterTrialInterval' %------------------------
@@ -280,7 +291,8 @@ try
                             if frame_counter == 1
                                 next_state = '';
                             elseif frame_counter == 2
-                                next_onset = state_onset + p.jitters.dur_InterTrailInterval(evt_iTrial);
+                                dur_expected = p.jitters.dur_InterTrailInterval(evt_iTrial);
+                                next_onset = state_onset + dur_expected;
                             end
 
                         otherwise %----------------------------------------
@@ -299,19 +311,26 @@ try
                         state_onset = flip_onset;
 
                         % logs
-                        fprintf('state = %s \n', state)
+                        fprintf('%s \n', state)
 
                         % save trial onset
                         if strcmp(state, 'ActionSelection')
                             ER.AddEvent({evt_name state_onset-StartTime [] EP.Data{evt, 4:end}})
                         end
+
                     end
 
                     if frame_counter > 2  &&  (flip_onset + slack >= next_onset)
+                        logit = state;
                         state = next_state;
                         frame_counter = 0;
                     end
 
+                    if logit 
+                        S.BR.AddEvent({evt_iTrial evt_iBlock evt_idx direction condition logit dur_expected flip_onset-state_onset state_onset-StartTime})
+                        logit = '';
+                    end
+                    
                     if isempty(state)
                         break
                     end
