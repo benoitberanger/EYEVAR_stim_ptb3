@@ -11,6 +11,10 @@ if strcmp(S.OperationMode,'Acquisition')
     disp('----------------------------------')
     disp(' ')
     
+    % Eyelink : start recording
+    if S.EyelinkMode
+        Eyelink.StartRecording(S.EyelinkFile); % Stop wrapper
+    end
     
     % Just to be sure the user is not pushing a button before
     WaitSecs(0.200); % secondes
@@ -43,22 +47,6 @@ if strcmp(S.OperationMode,'Acquisition')
                 error('WaitingForTTL:Abort','\n ESCAPE key : %s aborted \n',stack.file)
                 
             end
-            
-            %                 case 'Practice'
-            %
-            %                     if keyCode(S.Parameters.Keybinds.TTL_t_ASCII) || keyCode(S.Parameters.Keybinds.emulTTL_s_ASCII)
-            %
-            %                         break
-            %
-            %                     elseif keyCode(S.Parameters.Keybinds.Stop_Escape_ASCII)
-            %
-            %                         sca
-            %                         stack = dbstack;
-            %                         error('WitingForTTL:Abort','\n ESCAPE key : %s aborted \n',stack.file)
-            %
-            %                     end
-            %
-            %             end % switch
             
         end
         

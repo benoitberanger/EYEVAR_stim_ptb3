@@ -84,7 +84,7 @@ if S.EyelinkMode
     assert( ~isempty(which('Eyelink.m')), 'no ''Eyelink.m'' detected in the path')
 
     % Save mode ?
-    assert( SaveMode ,' \n ---> Save mode should be turned ON when using Eyelink <--- \n ')
+    assert( S.SaveMode == 1 ,' \n ---> Save mode should be turned ON when using Eyelink <--- \n ')
 
     % Eyelink connected ?
     Eyelink.IsConnected();
