@@ -360,14 +360,20 @@ try
         case 'RealisticDebug'
             % plotDelay(EP,ER);
     end
-
+    
     try % I really don't want to this feature to screw a standard task execution
         if exist('moviePtr','var')
             PTB_ENGINE.VIDEO.MOVIE.Finalize(moviePtr);
         end
     catch
     end
-
+    
+    
+    %% Close PTB textures
+    
+    WALL_E.CloseTextures();
+    EVE.CloseTextures();
+    
 
 catch err
 
