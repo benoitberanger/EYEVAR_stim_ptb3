@@ -169,6 +169,15 @@ end
 assignin('base', 'S', S);
 
 
+%% Save behavior
+
+if S.SaveMode && strcmp(S.OperationMode,'Acquisition')
+    t = S.BR.data2table();
+    writetable(t, S.DataFileFPath, 'WriteVariableNames', true, 'Delimiter','\t')
+    movefile([S.DataFileFPath '.txt'], [S.DataFileFPath '.tsv'])
+end
+
+
 %% Post-processing : generate all models for SPM
 
 % block design
