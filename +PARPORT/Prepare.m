@@ -9,10 +9,13 @@ WriteParPort(0)
 
 %% Prepare messages
 
-% fill here...
-msg.Event01 = 1;
-msg.Event02 = 2;
-msg.Event03 = 3;
+msg.go    = '0 0 0 0   0 0 0 1';
+msg.no    = '0 0 0 0   0 0 1 0';
+
+msg.right = '0 0 0 0   0 1 0 0';
+msg.down  = '0 0 0 0   1 0 0 0';
+msg.free  = '0 0 0 0   1 1 0 0';
+
 
 
 %% Finalize
