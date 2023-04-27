@@ -1,7 +1,7 @@
 function pushbutton_DownloadELfiles(hObject, ~)
 handles = guidata(hObject);
 
-[ ~, ~, dirpath_SubjectID ] = CONTROLLER.getSubjectID(handles);
+[ ~, ~, dirpath_SubjectID ] = GUI.CONTROLLER.getSubjectID(handles);
 
 el_file = fullfile( dirpath_SubjectID, 'eyelink_files_to_download.txt' );
 

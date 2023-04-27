@@ -13,6 +13,7 @@ if strcmp(S.OperationMode,'Acquisition')
     
     % Eyelink : start recording
     if S.EyelinkMode
+        Eyelink.storeELfilename(S.dirpath_SubjectID, S.EyelinkFile, S.DataFileName);
         Eyelink.StartRecording(S.EyelinkFile); % Stop wrapper
     end
     
