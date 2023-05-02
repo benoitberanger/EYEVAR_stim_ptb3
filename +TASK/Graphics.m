@@ -14,9 +14,9 @@ p.FixationCross.position = [0.50 0.50];                                    % [ C
 
 %% WALL_E (common)
 
-p.WALL_E.displaysize    = 1.0;                                             % size of central displayed object, in VA
+p.WALL_E.displaysize    = 1.0;                                             % size of central displayed rect/frame, in VA
 p.WALL_E.windowsize     = 2.0;                                             % size of central gaze accepted window, in VA
-p.WALL_E.width          = 0.10 * p.WALL_E.displaysize;                     % width of rect, in VA
+p.WALL_E.width          = 0.10 * p.WALL_E.displaysize;                     % width of central displayed frame, in VA
 p.WALL_E.center         = [0.50 0.50];                                     % [ CenterX CenterY ] ratio from 0 to 1 ofscreen size
 
 
@@ -29,18 +29,20 @@ p.WALL_E.color.blue     = [112 158 196 255];
 
 p.WALL_E.img.free       = 'img/question_mark_96px.png';
 p.WALL_E.img.right      = 'img/arrow_right_96px.png';
-p.WALL_E.img.dim        = (p.WALL_E.displaysize - p.WALL_E.width) * 0.9;           % image size, in VA
+p.WALL_E.img.dim        = (p.WALL_E.displaysize - p.WALL_E.width) * 0.9;   % image size, in VA
+p.WALL_E.img.smooth     = 0;                                               % gaussian blur kernel size, in pixel
 
 
 %% EVE (common)
 
-p.EVE.displaysize       = 1.0;                                             % size of target displayed object, in VA
+p.EVE.displaysize       = 1.0;                                             % size of target displayed oval, in VA
 p.EVE.windowsize        = 2.0;                                             % size of target gaze accepted window, in VA
 p.EVE.excentricity_lr   = 10.0;                                            % distance from WALL_E, in VA
 p.EVE.excentricity_ud   =  5.0;                                            % distance from WALL_E, in VA
 p.EVE.color.yellow      = p.WALL_E.color.yellow;                           % [R G B a] from 0 to 255
 p.EVE.img.happy         = 'img/smiley_happy_96px.png';
 p.EVE.img.sad           = 'img/smiley_sad_96px.png';
+p.EVE.img.smooth        = 0;                                               % gaussian blur kernel size, in pixel
 
 
 %% SAURON (common)
