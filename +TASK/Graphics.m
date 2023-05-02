@@ -21,7 +21,7 @@ p.WALL_E.center         = [0.50 0.50];                                     % [ C
 
 
 %                         [R   G   B   a  ] from 0 to 255
-p.WALL_E.color.white    = [200 200 200 255];
+p.WALL_E.color.white    = [255 255 255 255];
 p.WALL_E.color.yellow   = [253 219 000 255];
 p.WALL_E.color.green    = [067 182 059 255];
 p.WALL_E.color.red      = [220 040 030 255];
@@ -42,6 +42,7 @@ p.EVE.excentricity_ud   =  5.0;                                            % dis
 p.EVE.color.yellow      = p.WALL_E.color.yellow;                           % [R G B a] from 0 to 255
 p.EVE.img.happy         = 'img/smiley_happy_96px.png';
 p.EVE.img.sad           = 'img/smiley_sad_96px.png';
+p.EVE.img.neutral       = 'img/smiley_neutral_96px.png';
 p.EVE.img.smooth        = 0;                                               % gaussian blur kernel size, in pixel
 
 

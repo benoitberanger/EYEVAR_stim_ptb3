@@ -5,6 +5,8 @@ switch categ
         img = self.img.happy;
     case 'sad'
         img = self.img.sad;
+    case 'neutral'
+        img = self.img.neutral;
     otherwise
         error('categ')
 end

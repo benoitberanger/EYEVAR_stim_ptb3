@@ -206,6 +206,11 @@ try
                                             isinrect_down  = IsInRect(gaze_x, gaze_y, EVE.windowRect.down );
                                             isinrect_right = IsInRect(gaze_x, gaze_y, EVE.windowRect.right);
                                             isinrect = isinrect_down + isinrect_right;
+                                            if isinrect_down
+                                                free_direction = {'down'};
+                                            elseif isinrect_right
+                                                free_direction = {'right'};
+                                            end
                                         otherwise
                                             isinrect = IsInRect(gaze_x, gaze_y, EVE.windowRect.(direction));
                                     end
@@ -225,23 +230,38 @@ try
 
                                     if fixation_duration > 0 && ~isinrect % in the target, then out -> FAIL
                                         gaze_fixed = -1;
-                                        smiley = ' ';
-                                        logit = state;
-                                        state = 'InterTrialInterval';
-                                        fixation_duration = 0;
-                                        frame_counter = 0;
-                                    elseif frame_counter > 2 && fixation_duration == 0 && (next_onset-flip_onset) < p.dur_ResponseCue_Go_MinimumStay % no time left to reach the target
-                                        gaze_fixed = -1;
+                                        smiley = 'neutral';
                                         logit = state;
                                         state = 'Feedback';
-                                        smiley = 'sad';
                                         fixation_duration = 0;
                                         frame_counter = 0;
+                                        
+                                    elseif frame_counter > 2 && fixation_duration == 0 && (next_onset-flip_onset) < p.dur_ResponseCue_Go_MinimumStay % no time left to reach the target
+                                        switch direction
+                                            case 'free'
+                                                gaze_fixed = -1;
+                                                logit = state;
+                                                state = 'Feedback';
+                                                smiley = 'sad';
+                                                fixation_duration = 0;
+                                                frame_counter = 0;
+                                                free_direction = {'center'};
+                                            otherwise
+                                                gaze_fixed = -1;
+                                                logit = state;
+                                                state = 'Feedback';
+                                                smiley = 'sad';
+                                                fixation_duration = 0;
+                                                frame_counter = 0;
+                                        end
+                                        
                                     end
 
                                 case 'no'
-
-                                    if IsInRect(gaze_x, gaze_y, WALL_E.windowRect)
+                                    
+                                    isinrect = IsInRect(gaze_x, gaze_y, WALL_E.windowRect);
+                                    
+                                    if isinrect
                                         fixation_duration = fixation_duration + S.PTB.Video.IFI;
 
                                         if fixation_duration >= p.dur_ResponseCue_No_MinimumStay
@@ -252,15 +272,34 @@ try
                                             fixation_duration = 0;
                                             frame_counter = 0;
                                         end
-
-                                    else
-                                        fixation_duration = 0;
                                     end
+                                    
+                                    if fixation_duration > 0 && ~isinrect % in the center, then out -> FAIL
+                                        gaze_fixed = -1;
+                                        smiley = 'sad';
+                                        logit = state;
+                                        state = 'Feedback';
+                                        fixation_duration = 0;
+                                        frame_counter = 0;
+                                    end
+                                    
                             end
 
                         case 'Feedback' %-----------------------------------
 
-                            EVE.DrawImage(smiley, 'center')
+                            switch condition
+                                case 'go'
+                                    switch direction
+                                        case 'free'
+                                            for d = 1 : length(free_direction)
+                                                EVE.DrawImage(smiley, free_direction{d})
+                                            end
+                                        otherwise
+                                            EVE.DrawImage(smiley, direction)
+                                    end
+                                case 'no'
+                                    EVE.DrawImage(smiley, 'center')
+                            end
 
                             if frame_counter == 1
                                 next_state = 'InterTrialInterval';

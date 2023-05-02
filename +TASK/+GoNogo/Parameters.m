@@ -25,6 +25,10 @@ p.Conditions = {
     'down'  'no' 1
     };
 
+p.Conditions = {
+    'right'  'go' 10
+    };
+
 p.nRep = 10;
 
 % % experimentor will choose DOWN or RIGHT
@@ -50,8 +54,8 @@ switch InputMethod
         p.dur_TargetAppearance           = 0.400 + [-0.200 +0.200];
 
         p.dur_ResponseCue_Maximum        = 0.850;
-        p.dur_ResponseCue_No_MinimumStay = 0.250;
-        p.dur_ResponseCue_Go_MinimumStay = 0.050;
+        p.dur_ResponseCue_No_MinimumStay = 0.500;
+        p.dur_ResponseCue_Go_MinimumStay = 0.100;
 
         p.dur_Feedback                   = 0.200;                      % smiley display duration
 
@@ -68,8 +72,8 @@ switch InputMethod
         p.dur_TargetAppearance           = 0.400 + [-0.200 +0.200];
 
         p.dur_ResponseCue_Maximum        = 1.500;
-        p.dur_ResponseCue_No_MinimumStay = 0.250;
-        p.dur_ResponseCue_Go_MinimumStay = 0.050;
+        p.dur_ResponseCue_No_MinimumStay = 0.500;
+        p.dur_ResponseCue_Go_MinimumStay = 0.500;
 
         p.dur_Feedback                   = 0.200;                      % smiley display duration
 

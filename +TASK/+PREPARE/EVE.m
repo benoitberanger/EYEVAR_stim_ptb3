@@ -37,6 +37,16 @@ eve.img.sad.mask = 'NoMask';
 eve.img.sad.scale = eve.va2pix * S.TaskParam.EVE.displaysize / eve.img.sad.baseRect(4);
 eve.img.sad.MakeTexture();
 
+eve.img.neutral = PTB_OBJECTS.VIDEO.Image();
+eve.img.neutral.filename = S.TaskParam.EVE.img.neutral;
+eve.img.neutral.LinkToWindowPtr(S.PTB.Video.wPtr);
+eve.img.neutral.GetScreenSize();
+eve.img.neutral.LoadAndColorizeAlpha(S.TaskParam.EVE.color.yellow);
+eve.img.neutral.SmoothAlpha(S.TaskParam.EVE.img.smooth);
+eve.img.neutral.mask = 'NoMask';
+eve.img.neutral.scale = eve.va2pix * S.TaskParam.EVE.displaysize / eve.img.neutral.baseRect(4);
+eve.img.neutral.MakeTexture();
+
 eve.GenRect();
 
 eve.AssertReady();
