@@ -25,10 +25,6 @@ p.Conditions = {
     'down'  'no' 1
     };
 
-p.Conditions = {
-    'right'  'go' 10
-    };
-
 p.nRep = 10;
 
 % % experimentor will choose DOWN or RIGHT

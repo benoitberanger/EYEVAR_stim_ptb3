@@ -8,7 +8,7 @@ function p = Graphics( p )
 
 p.FixationCross.dim      = 1.0;                                            % size of cross, in VA
 p.FixationCross.width    = 0.10 * p.FixationCross.dim;                     % width of cross arm, in VA
-p.FixationCross.color    = [127 127 127 255];                              % [R G B a], from 0 to 255
+p.FixationCross.color    = [000 000 000 255];                              % [R G B a], from 0 to 255
 p.FixationCross.position = [0.50 0.50];                                    % [ CenterX CenterY ] ratio from 0 to 1 ofscreen size
 
 
