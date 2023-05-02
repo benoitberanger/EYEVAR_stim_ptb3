@@ -7,7 +7,8 @@ classdef WALL_E < PTB_OBJECTS.VIDEO.Base
 
         % Parameters
 
-        dim           (1,1) double  % size of rect, in VA
+        displaysize   (1,1) double  % size of rect, in VA
+        windowsize    (1,1) double  % edited by varsha
         width         (1,1) double  % width of rect, in VA
         center        (1,2) double  % [ CenterX CenterY ] ratio from 0 to 1 ofscreen size
 
@@ -28,8 +29,9 @@ classdef WALL_E < PTB_OBJECTS.VIDEO.Base
 
         % Internal variables
 
-        frameRect     (1,4) double  % [x1 y1 x2 y2] pixels, PTB coordinates
-        frameWidth    (1,1) double  % pixels
+        displayRect    (1,4) double  % [x1 y1 x2 y2] pixels, PTB coordinates
+        windowRect     (1,4) double  % [x1 y1 x2 y2] pixels, PTB coordinates %edited by varsha
+        frameWidth     (1,1) double  % pixels
 
     end % properties
 

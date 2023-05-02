@@ -7,9 +7,10 @@ wall_e.GetScreenSize();
 
 wall_e.va2pix   = S.PTB.Video.va2pix;
 
-wall_e.dim    = S.TaskParam.WALL_E.dim;
-wall_e.width  = S.TaskParam.WALL_E.width;
-wall_e.center = S.TaskParam.WALL_E.center;
+wall_e.displaysize = S.TaskParam.WALL_E.displaysize;
+wall_e.windowsize  = S.TaskParam.WALL_E.windowsize;
+wall_e.width       = S.TaskParam.WALL_E.width;
+wall_e.center      = S.TaskParam.WALL_E.center;
 
 wall_e.color.white  = S.TaskParam.WALL_E.color.white;
 wall_e.color.yellow = S.TaskParam.WALL_E.color.yellow;

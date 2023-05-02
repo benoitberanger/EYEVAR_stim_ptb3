@@ -17,11 +17,11 @@ p = struct; % This structure will contain all task specific parameters, such as 
 %% GoNogo
 
 p.Conditions = {
-    'free'  'go' 1
+    'free'  'go' 2
     'free'  'no' 1
-    'right' 'go' 1
+    'right' 'go' 2
     'right' 'no' 1
-    'down'  'go' 1
+    'down'  'go' 2
     'down'  'no' 1
     };
 
@@ -41,37 +41,37 @@ switch InputMethod
 
     case 'eyetracker'
 
-        % all dur* are in seconds
-        p.dur_ActionSelection            = 2.300 + [-0.500 +0.500];
+        % all dur_* are in seconds
+        p.dur_ActionSelection            = 2.000 + [-0.500 +0.500];
 
         p.dur_FixationPeriod_MinimumStay = 0.100; % gaze
-        p.dur_FixationPeriod_Maximum     = 0.300 + [-0.100 +0.100]; % got to next trial
+        p.dur_FixationPeriod_Maximum     = 0.200 + [-0.100 +0.100]; % got to next trial
 
         p.dur_TargetAppearance           = 0.400 + [-0.200 +0.200];
 
-        p.dur_ResponseCue_Maximum        = 0.700;
-        p.dur_ResponseCue_No_MinimumStay = p.dur_ResponseCue_Maximum ;
-        p.dur_ResponseCue_Go_MinimumStay = 0.200;
+        p.dur_ResponseCue_Maximum        = 0.850;
+        p.dur_ResponseCue_No_MinimumStay = 0.250;
+        p.dur_ResponseCue_Go_MinimumStay = 0.050;
 
-        p.dur_Feedback                   = 0.100;                      % smiley display duration
+        p.dur_Feedback                   = 0.200;                      % smiley display duration
 
         p.dur_InterTrailInterval         = 6.000 + [-0.500 +0.500];
 
     case 'mouse'
 
         % all dur* are in seconds
-        p.dur_ActionSelection            = 2.300 + [-0.500 +0.500];
+        p.dur_ActionSelection            = 2.000 + [-0.500 +0.500];
 
-        p.dur_FixationPeriod_MinimumStay = 0.300; % gaze
-        p.dur_FixationPeriod_Maximum     = 0.500 + [-0.100 +0.100]; % got to next trial
+        p.dur_FixationPeriod_MinimumStay = 0.100; % gaze
+        p.dur_FixationPeriod_Maximum     = 0.200 + [-0.100 +0.100]; % got to next trial
 
-        p.dur_TargetAppearance           = 0.500 + [-0.100 +0.100];
+        p.dur_TargetAppearance           = 0.400 + [-0.200 +0.200];
 
         p.dur_ResponseCue_Maximum        = 1.500;
-        p.dur_ResponseCue_No_MinimumStay = p.dur_ResponseCue_Maximum ;
-        p.dur_ResponseCue_Go_MinimumStay = 0.200;
+        p.dur_ResponseCue_No_MinimumStay = 0.250;
+        p.dur_ResponseCue_Go_MinimumStay = 0.050;
 
-        p.dur_Feedback                   = 0.100;                      % smiley display duration
+        p.dur_Feedback                   = 0.200;                      % smiley display duration
 
         p.dur_InterTrailInterval         = 6.000 + [-0.500 +0.500];
 
@@ -108,7 +108,8 @@ p = TASK.Graphics( p );
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-p.nTrial = sum(cell2mat(p.Conditions(:,3))) * p.nRep;
+nTrial_per_rep = sum(cell2mat(p.Conditions(:,3)));
+p.nTrial = nTrial_per_rep * p.nRep;
 
 
 %% Jitters
@@ -147,7 +148,15 @@ EP.AddStartTime('StartTime',0);
 iTrial = 0;
 for iBlock = 1 : p.nRep
 
-    cond = Shuffle(p.Conditions,2);
+    cond = cell(nTrial_per_rep,2);
+    c = 0;
+    for i1 = 1 : size(p.Conditions,1)
+        for i2 = 1 : p.Conditions{i1,3}
+            c = c + 1;
+            cond(c,:) = p.Conditions(i1,1:2);
+        end
+    end
+    cond = Shuffle(cond,2);
 
     for c = 1 : size(cond,1)
         iTrial = iTrial + 1;

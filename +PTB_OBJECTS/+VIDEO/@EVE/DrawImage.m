@@ -10,6 +10,8 @@ switch categ
 end
 
 switch pos
+    case 'center'
+        center = self.center.center;
     case 'right'
         center = self.center.right;
     case 'left'

@@ -136,6 +136,7 @@ try
                         case 'FixationPeriod' %----------------------------
 
                             WALL_E.DrawFrameSquare('white');
+                            WALL_E.DrawImage(direction);
 
                             if frame_counter == 1
                                 next_state = 'InterTrialInterval';
@@ -145,7 +146,7 @@ try
                                 next_onset = state_onset + dur_expected;
                             end
 
-                            if IsInRect(gaze_x, gaze_y, WALL_E.frameRect)
+                            if IsInRect(gaze_x, gaze_y, WALL_E.windowRect)
                                 fixation_duration = fixation_duration + S.PTB.Video.IFI;
 
                                 if fixation_duration >= p.dur_FixationPeriod_MinimumStay
@@ -163,6 +164,7 @@ try
                         case 'TargetAppearance' %--------------------------
 
                             WALL_E.DrawFillSquare('white');
+                            WALL_E.DrawImage(direction);
                             EVE.DrawFillSquare('down');
                             EVE.DrawFillSquare('right');
 
@@ -180,8 +182,10 @@ try
                             switch condition
                                 case 'go'
                                     WALL_E.DrawFillSquare('green')
+
                                 case 'no'
                                     WALL_E.DrawFillSquare('red')
+
                             end
 
                             if frame_counter == 1
@@ -199,18 +203,11 @@ try
 
                                     switch direction
                                         case 'free'
-                                            isinrect_down  = IsInRect(gaze_x, gaze_y, EVE.rect.down  );
-                                            isinrect_right = IsInRect(gaze_x, gaze_y, EVE.rect.right );
+                                            isinrect_down  = IsInRect(gaze_x, gaze_y, EVE.windowRect.down );
+                                            isinrect_right = IsInRect(gaze_x, gaze_y, EVE.windowRect.right);
                                             isinrect = isinrect_down + isinrect_right;
-                                            if isinrect_down
-                                                free_direction = 'down';
-                                            elseif isinrect_right
-                                                free_direction = 'right';
-                                            else
-                                                free_direction = {'down','right'};
-                                            end
                                         otherwise
-                                            isinrect = IsInRect(gaze_x, gaze_y, EVE.rect.(direction));
+                                            isinrect = IsInRect(gaze_x, gaze_y, EVE.windowRect.(direction));
                                     end
 
                                     if isinrect
@@ -244,7 +241,7 @@ try
 
                                 case 'no'
 
-                                    if IsInRect(gaze_x, gaze_y, WALL_E.frameRect)
+                                    if IsInRect(gaze_x, gaze_y, WALL_E.windowRect)
                                         fixation_duration = fixation_duration + S.PTB.Video.IFI;
 
                                         if fixation_duration >= p.dur_ResponseCue_No_MinimumStay
@@ -263,29 +260,7 @@ try
 
                         case 'Feedback' %-----------------------------------
 
-                            switch condition
-                                case 'go'
-                                    WALL_E.DrawFillSquare('green')
-                                    switch direction
-                                        case 'free'
-                                            if iscellstr(free_direction) %#ok<ISCLSTR>
-                                                for d = 1 : length(free_direction)
-                                                    EVE.DrawImage(smiley, free_direction{d})
-                                                end
-                                            end
-                                        otherwise
-                                            EVE.DrawImage(smiley, direction)
-                                    end
-                                case 'no'
-                                    WALL_E.DrawFillSquare('red')
-                                    switch direction
-                                        case 'free'
-                                            EVE.DrawImage(smiley, 'down')
-                                            EVE.DrawImage(smiley, 'right')
-                                        otherwise
-                                            EVE.DrawImage(smiley, direction)
-                                    end
-                            end
+                            EVE.DrawImage(smiley, 'center')
 
                             if frame_counter == 1
                                 next_state = 'InterTrialInterval';
@@ -321,7 +296,7 @@ try
                         if S.ParPort
                             PARPORT.SendMessage(S, {condition, direction, state})
                         end
-                        
+
                         fprintf('%s ', state) % log
 
                         state_onset = flip_onset;
