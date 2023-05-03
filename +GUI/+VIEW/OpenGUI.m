@@ -16,9 +16,9 @@ gui_name = [ 'GUI_' project_name() ];
 figPtr = findall(0,'Tag',gui_name);
 
 if ~isempty(figPtr) % Figure exists so brings it to the focus
-    
+
     figure(figPtr);
-    
+
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%% DEBUG %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     if debug
         clc %#ok<UNRCH>
@@ -26,13 +26,13 @@ if ~isempty(figPtr) % Figure exists so brings it to the focus
         GUI.VIEW.OpenGUI();
     end
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
-    
+
+
 else % Create the figure
-    
+
     rng('default')
     rng('shuffle')
-    
+
     % Create a figure
     figHandle = figure( ...
         'HandleVisibility', 'off',... % close all does not close the figure
@@ -41,51 +41,51 @@ else % Create the figure
         'Name'            , gui_name                 , ...
         'NumberTitle'     , 'off'                    , ...
         'Units'           , 'Pixels'                 , ...
-        'Position'        , [50, 50, 600, 700]       , ...
+        'Position'        , [50, 50, 600, 800]       , ...
         'Tag'             , gui_name                 );
-    
+
     figureBGcolor = [0.9 0.9 0.9]; set(figHandle,'Color',figureBGcolor);
     buttonBGcolor = figureBGcolor - 0.1;
     editBGcolor   = [1.0 1.0 1.0];
-    
+
     % Create GUI handles : pointers to access the graphic objects
     handles               = guihandles(figHandle);
     handles.figureBGcolor = figureBGcolor;
     handles.buttonBGcolor = buttonBGcolor;
     handles.editBGcolor   = editBGcolor  ;
-    
-    
+
+
     %% Panel proportions
-    
+
     % relative proportions of each panel, from bottom to top
-    PANEL = GUI.VIEW.PanelDispatcher( [0.5 0.75 1.5 1 0.75 0.75 0.75 1.5 ] );
-    
-    
+    PANEL = GUI.VIEW.PanelDispatcher( [0.50 0.50 1.00 0.50 1 0.50 0.50 0.50 1.5 ] );
+
+
     %% Panel : Subject & Run
-    
+
     p_sr.x = PANEL.x_pos;
     p_sr.w = PANEL.x_width;
-    
+
     PANEL.next();
     p_sr.y = PANEL.y_pos;
     p_sr.h = PANEL.y_height;
-    
+
     handles.uipanel_SubjectRun = uipanel(handles.(gui_name),...
         'Title','Subject & Run',...
         'Units', 'Normalized',...
         'Position',[p_sr.x p_sr.y p_sr.w p_sr.h],...
         'BackgroundColor',figureBGcolor);
-    
+
     o_sr = GUI.VIEW.ObjectDispatcher( [1 1 1] );
     p_sr.yposOmain = 0.1;
     p_sr.hOmain    = 0.6;
     p_sr.yposOhdr  = 0.7;
     p_sr.hOhdr     = 0.2;
-    
-    
+
+
     % ---------------------------------------------------------------------
     % Edit : Subject ID
-    
+
     o_sr.next();
     e_sid.x = o_sr.xpos;
     e_sid.y = p_sr.yposOmain ;
@@ -98,11 +98,11 @@ else % Create the figure
         'BackgroundColor',editBGcolor,...
         'String','',...
         'Callback',@GUI.VIEW.Callback.edit_SubjectID);
-    
-    
+
+
     % ---------------------------------------------------------------------
     % Text : Subject ID
-    
+
     t_sid.x = o_sr.xpos;
     t_sid.y = p_sr.yposOhdr ;
     t_sid.w = o_sr.xwidth;
@@ -113,11 +113,11 @@ else % Create the figure
         'Position',[t_sid.x t_sid.y t_sid.w t_sid.h],...
         'String','Subject ID',...
         'BackgroundColor',figureBGcolor);
-    
-    
+
+
     % ---------------------------------------------------------------------
     % Pushbutton : Check SubjectID data
-    
+
     o_sr.next();
     b_csidd.x = o_sr.xpos;
     b_csidd.y = p_sr.yposOmain;
@@ -131,11 +131,11 @@ else % Create the figure
         'BackgroundColor',buttonBGcolor,...
         'TooltipString','Display in Command Window the content of data/(SubjectID)',...
         'Callback',@GUI.VIEW.Callback.pushbutton_CheckSubjecIDdata);
-    
-    
+
+
     % ---------------------------------------------------------------------
     % Text : Last file name annoucer
-    
+
     o_sr.next();
     t_lfna.x = o_sr.xpos;
     t_lfna.y = p_sr.yposOhdr ;
@@ -148,11 +148,11 @@ else % Create the figure
         'String','Last file name',...
         'BackgroundColor',figureBGcolor,...
         'Visible','Off');
-    
-    
+
+
     % ---------------------------------------------------------------------
     % Text : Last file name
-    
+
     t_lfn.x = o_sr.xpos;
     t_lfn.y = p_sr.yposOmain ;
     t_lfn.w = o_sr.xwidth;
@@ -164,28 +164,28 @@ else % Create the figure
         'String','',...
         'BackgroundColor',figureBGcolor,...
         'Visible','Off');
-    
-    
+
+
     %% Panel : Save mode
-    
+
     p_sm.x = PANEL.x_pos;
     p_sm.w = PANEL.x_width;
-    
+
     PANEL.next();
     p_sm.y = PANEL.y_pos;
     p_sm.h = PANEL.y_height;
-    
+
     handles.uipanel_SaveMode = uibuttongroup(handles.(gui_name),...
         'Title','Save mode',...
         'Units', 'Normalized',...
         'Position',[p_sm.x p_sm.y p_sm.w p_sm.h],...
         'BackgroundColor',figureBGcolor);
-    
+
     o_sm = GUI.VIEW.ObjectDispatcher( [1 1] , 0.20 );
-    
+
     % ---------------------------------------------------------------------
     % RadioButton : Save Data
-    
+
     o_sm.next();
     r_sd.x   = o_sm.xpos;
     r_sd.y   = 0.1 ;
@@ -201,11 +201,11 @@ else % Create the figure
         'HorizontalAlignment','Center',...
         'Tag',r_sd.tag,...
         'BackgroundColor',figureBGcolor);
-    
-    
+
+
     % ---------------------------------------------------------------------
     % RadioButton : No save
-    
+
     o_sm.next();
     r_ns.x   = o_sm.xpos;
     r_ns.y   = 0.1 ;
@@ -221,33 +221,33 @@ else % Create the figure
         'HorizontalAlignment','Center',...
         'Tag',r_ns.tag,...
         'BackgroundColor',figureBGcolor);
-    
-    
+
+
     %% Panel : Input method
-    
+
     p_input.x = PANEL.x_pos;
     p_input.w = PANEL.x_width;
-    
+
     PANEL.next();
     p_input.y = PANEL.y_pos;
     p_input.h = PANEL.y_height;
-    
+
     handles.uipanel_InputMethod = uibuttongroup(handles.(gui_name),...
         'Title','Input method',...
         'Units', 'Normalized',...
         'Position',[p_input.x p_input.y p_input.w p_input.h],...
         'BackgroundColor',figureBGcolor,...
         'SelectionChangedFcn',@GUI.VIEW.SelectionChangeFcn.uipanel_InputMethod);
-    
-    o_env = GUI.VIEW.ObjectDispatcher( [1 1] , 0.20 );
-    
+
+    o_input = GUI.VIEW.ObjectDispatcher( [1 1] , 0.20 );
+
     % ---------------------------------------------------------------------
     % RadioButton : Eyetracker
-    
-    o_env.next();
-    r_eye.x   = o_env.xpos;
+
+    o_input.next();
+    r_eye.x   = o_input.xpos;
     r_eye.y   = 0.1 ;
-    r_eye.w   = o_env.xwidth;
+    r_eye.w   = o_input.xwidth;
     r_eye.h   = 0.8;
     r_eye.tag = 'radiobutton_input_eyetracker';
     handles.(r_eye.tag) = uicontrol(handles.uipanel_InputMethod,...
@@ -258,15 +258,15 @@ else % Create the figure
         'HorizontalAlignment','Center',...
         'Tag',r_eye.tag,...
         'BackgroundColor',figureBGcolor);
-    
-    
+
+
     % ---------------------------------------------------------------------
     % RadioButton : Mouse
-    
-    o_env.next();
-    r_mouse.x   = o_env.xpos;
+
+    o_input.next();
+    r_mouse.x   = o_input.xpos;
     r_mouse.y   = 0.1 ;
-    r_mouse.w   = o_env.xwidth;
+    r_mouse.w   = o_input.xwidth;
     r_mouse.h   = 0.8;
     r_mouse.tag = 'radiobutton_input_mouse';
     handles.(r_mouse.tag) = uicontrol(handles.uipanel_InputMethod,...
@@ -277,32 +277,32 @@ else % Create the figure
         'HorizontalAlignment','Center',...
         'Tag',r_mouse.tag,...
         'BackgroundColor',figureBGcolor);
-    
-    
+
+
     %% Panel : Show gaze, yes or no ?
-    
+
     p_show.x = PANEL.x_pos;
     p_show.w = PANEL.x_width;
-    
+
     PANEL.next();
     p_show.y = PANEL.y_pos;
     p_show.h = PANEL.y_height;
-    
+
     handles.uipanel_ShowGaze = uibuttongroup(handles.(gui_name),...
         'Title','Show cursor',...
         'Units', 'Normalized',...
         'Position',[p_show.x p_show.y p_show.w p_show.h],...
         'BackgroundColor',figureBGcolor);
-    
-    o_env = GUI.VIEW.ObjectDispatcher( [1 1] , 0.20 );
-    
+
+    o_gaze = GUI.VIEW.ObjectDispatcher( [1 1] , 0.20 );
+
     % ---------------------------------------------------------------------
     % RadioButton : show::no
-    
-    o_env.next();
-    r_show_no.x   = o_env.xpos;
+
+    o_gaze.next();
+    r_show_no.x   = o_gaze.xpos;
     r_show_no.y   = 0.1 ;
-    r_show_no.w   = o_env.xwidth;
+    r_show_no.w   = o_gaze.xwidth;
     r_show_no.h   = 0.8;
     r_show_no.tag = 'radiobutton_show_0';
     handles.(r_show_no.tag) = uicontrol(handles.uipanel_ShowGaze,...
@@ -313,15 +313,15 @@ else % Create the figure
         'HorizontalAlignment','Center',...
         'Tag',r_show_no.tag,...
         'BackgroundColor',figureBGcolor);
-    
-    
+
+
     % ---------------------------------------------------------------------
     % RadioButton : show::yes
-    
-    o_env.next();
-    r_show_yes.x   = o_env.xpos;
+
+    o_gaze.next();
+    r_show_yes.x   = o_gaze.xpos;
     r_show_yes.y   = 0.1 ;
-    r_show_yes.w   = o_env.xwidth;
+    r_show_yes.w   = o_gaze.xwidth;
     r_show_yes.h   = 0.8;
     r_show_yes.tag = 'radiobutton_show_1';
     handles.(r_show_yes.tag) = uicontrol(handles.uipanel_ShowGaze,...
@@ -332,36 +332,36 @@ else % Create the figure
         'HorizontalAlignment','Center',...
         'Tag',r_show_yes.tag,...
         'BackgroundColor',figureBGcolor);
-    
-    
+
+
     %% Panel : Eyelink mode
-    
+
     el_shift = 0.25;
-    
+
     p_el.x = PANEL.x_pos/2 + el_shift;
     p_el.w = PANEL.x_width - el_shift + PANEL.x_pos/2;
-    
+
     PANEL.next();
     p_el.y = PANEL.y_pos;
     p_el.h = PANEL.y_height;
-    
+
     handles.uipanel_EyelinkMode = uibuttongroup(handles.(gui_name),...
         'Title','Eyelink mode',...
         'Units', 'Normalized',...
         'Position',[p_el.x p_el.y p_el.w p_el.h],...
         'BackgroundColor',figureBGcolor,...
         'SelectionChangeFcn',@GUI.VIEW.SelectionChangeFcn.uipanel_EyelinkMode);
-    
-    
+
+
     % ---------------------------------------------------------------------
     % Checkbox : Windowed screen
-    
+
     c_ws.x = PANEL.x_pos;
     c_ws.w = el_shift - PANEL.x_pos/2;
-    
+
     c_ws.y = PANEL.y_pos-0.01 ;
     c_ws.h = p_el.h * 0.3;
-    
+
     handles.checkbox_WindowedScreen = uicontrol(handles.(gui_name),...
         'Style','checkbox',...
         'Units', 'Normalized',...
@@ -369,17 +369,17 @@ else % Create the figure
         'String','Windowed screen',...
         'HorizontalAlignment','Center',...
         'BackgroundColor',figureBGcolor);
-    
-    
+
+
     % ---------------------------------------------------------------------
     % Listbox : Screens
-    
+
     l_sc.x = PANEL.x_pos;
     l_sc.w = el_shift - PANEL.x_pos;
-    
+
     l_sc.y = c_ws.y + c_ws.h ;
     l_sc.h = p_el.h * 0.6;
-    
+
     handles.listbox_Screens = uicontrol(handles.(gui_name),...
         'Style','listbox',...
         'Units', 'Normalized',...
@@ -388,17 +388,17 @@ else % Create the figure
         'TooltipString','Select the display mode   PTB : 0 for extended display (over all screens) , 1 for screen 1 , 2 for screen 2 , etc.',...
         'HorizontalAlignment','Center',...
         'CreateFcn',@GUI.Listbox_Screens_CreateFcn);
-    
-    
+
+
     % ---------------------------------------------------------------------
     % Text : ScreenMode
-    
+
     t_sm.x = PANEL.x_pos;
     t_sm.w = el_shift - PANEL.x_pos;
-    
+
     t_sm.y = l_sc.y + l_sc.h ;
     t_sm.h = p_el.h * 0.15;
-    
+
     handles.text_ScreenMode = uicontrol(handles.(gui_name),...
         'Style','text',...
         'Units', 'Normalized',...
@@ -407,20 +407,20 @@ else % Create the figure
         'TooltipString','Output of Screen(''Screens'')   Use ''Screen Screens?'' in Command window for help',...
         'HorizontalAlignment','Center',...
         'BackgroundColor',figureBGcolor);
-    
-    
+
+
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
+
     p_el_up.nbO    = 6; % Number of objects
     p_el_up.w     = 1/(p_el_up.nbO + 1); % Object width
     p_el_up.count = 0; % Object counter
     p_el_up.xpos  = @(count) p_el_up.w/(p_el_up.nbO+1)*count + (count-1)*p_el_up.w;
     p_el_up.y      = 0.6;
     p_el_up.h      = 0.3;
-    
+
     % ---------------------------------------------------------------------
     % RadioButton : Eyelink ON
-    
+
     p_el_up.count = p_el_up.count + 1;
     r_elon.x   = p_el_up.xpos(p_el_up.count);
     r_elon.y   = p_el_up.y ;
@@ -436,11 +436,11 @@ else % Create the figure
         'Tag',r_elon.tag,...
         'BackgroundColor',figureBGcolor,...
         'Visible','On');
-    
-    
+
+
     % ---------------------------------------------------------------------
     % RadioButton : Eyelink OFF
-    
+
     p_el_up.count = p_el_up.count + 1;
     r_eloff.x   = p_el_up.xpos(p_el_up.count);
     r_eloff.y   = p_el_up.y ;
@@ -456,11 +456,11 @@ else % Create the figure
         'Tag',r_eloff.tag,...
         'BackgroundColor',figureBGcolor,...
         'Visible','On');
-    
-    
+
+
     % ---------------------------------------------------------------------
     % Checkbox : Parallel port
-    
+
     p_el_up.count = p_el_up.count + 1;
     c_pp.x = p_el_up.xpos(p_el_up.count);
     c_pp.y = p_el_up.y ;
@@ -478,21 +478,21 @@ else % Create the figure
         'Callback',@GUI.Checkbox_ParPort_Callback,...
         'CreateFcn',@GUI.Checkbox_ParPort_Callback,...
         'Visible','On');
-    
-    
+
+
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
+
     p_el_dw.nbO    = 4.5; % Number of objects
     p_el_dw.w     = 1/(p_el_dw.nbO + 1); % Object width
     p_el_dw.count = 0; % Object counter
     p_el_dw.xpos  = @(count) p_el_dw.w/(p_el_dw.nbO+1)*count + (count-1)*p_el_dw.w;
     p_el_dw.y      = 0.1;
     p_el_dw.h      = 0.4 ;
-    
-    
+
+
     % ---------------------------------------------------------------------
     % Pushbutton : Eyelink Initialize
-    
+
     p_el_dw.count = p_el_dw.count + 1;
     b_init.x = p_el_dw.xpos(p_el_dw.count);
     b_init.y = p_el_dw.y ;
@@ -505,10 +505,10 @@ else % Create the figure
         'String','Initialize',...
         'BackgroundColor',buttonBGcolor,...
         'Callback','Eyelink.Initialize');
-    
+
     % ---------------------------------------------------------------------
     % Pushbutton : Eyelink IsConnected
-    
+
     p_el_dw.count = p_el_dw.count + 1;
     b_isco.x = p_el_dw.xpos(p_el_dw.count);
     b_isco.y = p_el_dw.y ;
@@ -521,11 +521,11 @@ else % Create the figure
         'String','IsConnected',...
         'BackgroundColor',buttonBGcolor,...
         'Callback','Eyelink.IsConnected');
-    
-    
+
+
     % ---------------------------------------------------------------------
     % Pushbutton : Eyelink Calibration
-    
+
     p_el_dw.count = p_el_dw.count + 1;
     b_cal.x   = p_el_dw.xpos(p_el_dw.count);
     b_cal.y   = p_el_dw.y ;
@@ -540,11 +540,11 @@ else % Create the figure
         'BackgroundColor',buttonBGcolor,...
         'Tag',b_cal.tag,...
         'Callback',@GUI.VIEW.Callback.pushbutton_EyelinkCalibration);
-    
-    
+
+
     % ---------------------------------------------------------------------
     % Pushbutton : Download EL files according to the SubjectID
-    
+
     p_el_dw.count = p_el_dw.count + 1;
     b_cal.x   = p_el_dw.xpos(p_el_dw.count);
     b_cal.y   = p_el_dw.y ;
@@ -559,11 +559,11 @@ else % Create the figure
         'BackgroundColor',buttonBGcolor*0.9,...
         'Tag',b_cal.tag,...
         'Callback',@GUI.VIEW.Callback.pushbutton_DownloadELfiles);
-    
-    
+
+
     % ---------------------------------------------------------------------
     % Pushbutton : Eyelink force shutdown
-    
+
     b_fsd.x = c_pp.x + c_pp.h;
     b_fsd.y = p_el_up.y ;
     b_fsd.w = p_el_dw.w*1.50;
@@ -575,35 +575,94 @@ else % Create the figure
         'String','ForceShutDown',...
         'BackgroundColor',buttonBGcolor,...
         'Callback','Eyelink.ForceShutDown');
-    
-    
-    %% Panel : Task
-    
-    p_task.x = PANEL.x_pos;
-    p_task.w = PANEL.x_width ;
-    
+
+
+    %% Panel : training vs. full
+
+    p_dur.x = PANEL.x_pos;
+    p_dur.w = PANEL.x_width;
+
     %----------------------------------------------------------------------
     %
-    
+
+    PANEL.next();
+    p_dur.y = PANEL.y_pos;
+    p_dur.h = PANEL.y_height;
+
+    handles.uipanel_Duration = uibuttongroup(handles.(gui_name),...
+        'Title','Training vs. full',...
+        'Units', 'Normalized',...
+        'Position',[p_dur.x p_dur.y p_dur.w p_dur.h],...
+        'BackgroundColor',figureBGcolor);
+
+
+    o_dur = GUI.VIEW.ObjectDispatcher( [1 1] , 0.20 );
+
+    % ---------------------------------------------------------------------
+    % RadioButton : Eyetracker
+
+    o_dur.next();
+    r_training.x   = o_dur.xpos;
+    r_training.y   = 0.1 ;
+    r_training.w   = o_dur.xwidth;
+    r_training.h   = 0.8;
+    r_training.tag = 'radiobutton_duration_training';
+    handles.(r_training.tag) = uicontrol(handles.uipanel_Duration,...
+        'Style','radiobutton',...
+        'Units', 'Normalized',...
+        'Position',[r_training.x r_training.y r_training.w r_training.h],...
+        'String','Training',...
+        'HorizontalAlignment','Center',...
+        'Tag',r_training.tag,...
+        'BackgroundColor',figureBGcolor);
+
+
+    % ---------------------------------------------------------------------
+    % RadioButton : Mouse
+
+    o_dur.next();
+    r_full.x   = o_dur.xpos;
+    r_full.y   = 0.1 ;
+    r_full.w   = o_dur.xwidth;
+    r_full.h   = 0.8;
+    r_full.tag = 'radiobutton_duration_full';
+    handles.(r_full.tag) = uicontrol(handles.uipanel_Duration,...
+        'Style','radiobutton',...
+        'Units', 'Normalized',...
+        'Position',[r_full.x r_full.y r_full.w r_full.h],...
+        'String','Full',...
+        'HorizontalAlignment','Center',...
+        'Tag',r_full.tag,...
+        'BackgroundColor',figureBGcolor);
+
+
+    %% Panel : Task
+
+    p_task.x = PANEL.x_pos;
+    p_task.w = PANEL.x_width ;
+
+    %----------------------------------------------------------------------
+    %
+
     PANEL.next();
     p_task.y = PANEL.y_pos;
     p_task.h = PANEL.y_height;
-    
+
     handles.uipanel_Task = uibuttongroup(handles.(gui_name),...
         'Title','Task',...
         'Units', 'Normalized',...
         'Position',[p_task.x p_task.y p_task.w p_task.h],...
         'BackgroundColor',figureBGcolor);
-    
+
     TaskList = GUI.MODEL.getTaskList();
     TaskVect = ones([1 length(TaskList)]);
-    
+
     o_task = GUI.VIEW.ObjectDispatcher( TaskVect );
-    
+
     for i = 1 : length(TaskList)
-        
+
         o_task.next();
-        
+
         b_task.x   = o_task.xpos;
         b_task.w   = o_task.xwidth;
         b_task.y   = o_task.ypos;
@@ -617,30 +676,30 @@ else % Create the figure
             'BackgroundColor', buttonBGcolor                        ,...
             'Tag'            , b_task.tag                           ,...
             'Callback'       , @GUI.MODEL.Core                      );
-        
+
     end
-    
-    
+
+
     %% Panel : Operation mode
-    
+
     p_op.x = PANEL.x_pos;
     p_op.w = PANEL.x_width;
-    
+
     PANEL.next();
     p_op.y = PANEL.y_pos;
     p_op.h = PANEL.y_height;
-    
+
     handles.uipanel_OperationMode = uibuttongroup(handles.(gui_name),...
         'Title','Operation mode',...
         'Units', 'Normalized',...
         'Position',[p_op.x p_op.y p_op.w p_op.h],...
         'BackgroundColor',figureBGcolor);
-    
+
     o_op = GUI.VIEW.ObjectDispatcher( [1 1 1] , 0.1 );
-    
+
     % ---------------------------------------------------------------------
     % RadioButton : Acquisition
-    
+
     o_op.next()
     r_aq.x = o_op.xpos;
     r_aq.y = 0.1 ;
@@ -656,11 +715,11 @@ else % Create the figure
         'HorizontalAlignment','Center',...
         'Tag',r_aq.tag,...
         'BackgroundColor',figureBGcolor);
-    
-    
+
+
     % ---------------------------------------------------------------------
     % RadioButton : FastDebug
-    
+
     o_op.next()
     r_fd.x   = o_op.xpos;
     r_fd.y   = 0.1 ;
@@ -676,11 +735,11 @@ else % Create the figure
         'HorizontalAlignment','Center',...
         'Tag',r_fd.tag,...
         'BackgroundColor',figureBGcolor);
-    
-    
+
+
     % ---------------------------------------------------------------------
     % RadioButton : RealisticDebug
-    
+
     o_op.next()
     r_rd.x   = o_op.xpos;
     r_rd.y   = 0.1 ;
@@ -696,28 +755,28 @@ else % Create the figure
         'HorizontalAlignment','Center',...
         'Tag',r_rd.tag,...
         'BackgroundColor',figureBGcolor);
-    
-    
+
+
     %% Panel : record movie
-    
+
     p_movie.x = PANEL.x_pos;
     p_movie.w = PANEL.x_width;
-    
+
     PANEL.next();
     p_movie.y = PANEL.y_pos;
     p_movie.h = PANEL.y_height;
-    
+
     handles.uipanel_Movie = uibuttongroup(handles.(gui_name),...
         'Title','Movie recording',...
         'Units', 'Normalized',...
         'Position',[p_movie.x p_movie.y p_movie.w p_movie.h],...
         'BackgroundColor',figureBGcolor);
-    
+
     o_movie = GUI.VIEW.ObjectDispatcher( [1 1] , 0.25 );
-    
+
     % ---------------------------------------------------------------------
     % RadioButton : 0
-    
+
     o_movie.next();
     r_movie_off.x   = o_movie.xpos;
     r_movie_off.y   = 0.1 ;
@@ -732,11 +791,11 @@ else % Create the figure
         'HorizontalAlignment','Center'                    ,...
         'Tag',r_movie_off.tag                             ,...
         'BackgroundColor',figureBGcolor                   );
-    
-    
+
+
     % ---------------------------------------------------------------------
     % RadioButton : 1
-    
+
     o_movie.next();
     r_movie_on.x   = o_movie.xpos;
     r_movie_on.y   = 0.1 ;
@@ -751,45 +810,45 @@ else % Create the figure
         'HorizontalAlignment','Center'                      ,...
         'Tag',r_movie_on.tag                                ,...
         'BackgroundColor',figureBGcolor                     );
-    
-    
+
+
     %% End of opening
-    
+
     % IMPORTANT
     guidata(figHandle,handles)
     % After creating the figure, dont forget the line
     % guidata(figHandle,handles) . It allows smart retrive like
     % handles=guidata(hObject)
-    
+
     % Init with EYELINK On
     set(handles.uipanel_EyelinkMode,'SelectedObject',handles.radiobutton_Eyelink_1)
     eventdata.NewValue = handles.radiobutton_Eyelink_1;
     GUI.VIEW.SelectionChangeFcn.uipanel_EyelinkMode(handles.uipanel_EyelinkMode, eventdata)
-    
-    
+
+
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%% DEBUG %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     if debug
         assignin('base','handles',handles) %#ok<UNRCH>
         disp(handles)
     end
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
+
     figPtr = figHandle;
-    
+
     fprintf('\n')
     fprintf('Response buttons (fORRP 932) : \n')
     fprintf('USB \n')
     fprintf('HHSC - 2x1 CYL \n')
     fprintf('HID BYGRT \n')
     fprintf('\n')
-    
-    
+
+
 end % creation of figure
 
 if nargout > 0
-    
+
     varargout{1} = guidata(figPtr);
-    
+
 end
 
 

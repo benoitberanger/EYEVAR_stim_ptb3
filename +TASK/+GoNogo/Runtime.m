@@ -5,7 +5,7 @@ try
     %% Tuning of the task
 
     TASK.Keybindings();
-    [ EP, p ] = TASK.GoNogo.Parameters( S.OperationMode, S.InputMehtod );
+    [ EP, p ] = TASK.GoNogo.Parameters( S.OperationMode, S.InputMehtod, S.Duration );
 
 
     %% Prepare recorders
@@ -98,7 +98,7 @@ try
                 next_event = StartTime + next_evt_onset - slack;
 
                 % log
-                fprintf('trial=%3d // block=%2d // idx=%1d // direction=%5s // condition=%2s \n', ...
+                fprintf('trial=%3d    block=%2d    idx=%1d    direction=%5s    condition=%2s \n', ...
                     evt_iTrial, evt_iBlock, evt_idx, direction, condition)
 
                 state = 'ActionSelection';
@@ -235,7 +235,7 @@ try
                                         state = 'Feedback';
                                         fixation_duration = 0;
                                         frame_counter = 0;
-                                        
+
                                     elseif frame_counter > 2 && fixation_duration == 0 && (next_onset-flip_onset) < p.dur_ResponseCue_Go_MinimumStay % no time left to reach the target
                                         switch direction
                                             case 'free'
@@ -254,13 +254,13 @@ try
                                                 fixation_duration = 0;
                                                 frame_counter = 0;
                                         end
-                                        
+
                                     end
 
                                 case 'no'
-                                    
+
                                     isinrect = IsInRect(gaze_x, gaze_y, WALL_E.windowRect);
-                                    
+
                                     if isinrect
                                         fixation_duration = fixation_duration + S.PTB.Video.IFI;
 
@@ -273,7 +273,7 @@ try
                                             frame_counter = 0;
                                         end
                                     end
-                                    
+
                                     if fixation_duration > 0 && ~isinrect % in the center, then out -> FAIL
                                         gaze_fixed = -1;
                                         smiley = 'sad';
@@ -282,7 +282,7 @@ try
                                         fixation_duration = 0;
                                         frame_counter = 0;
                                     end
-                                    
+
                             end
 
                         case 'Feedback' %-----------------------------------
@@ -364,7 +364,7 @@ try
 
                     if isempty(state)
                         % log
-                        fprintf('\n')
+                        fprintf('\n\n')
                         break
                     end
 

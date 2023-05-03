@@ -1,9 +1,10 @@
-function [ EP, TaskParam ] = Parameters( OperationMode, InputMethod )
+function [ EP, TaskParam ] = Parameters( OperationMode, InputMethod, Duration )
 global S
 
 if nargin < 1 % only to plot the paradigme when we execute the function outside of the main script
     OperationMode = 'Acquisition';
     InputMethod = 'eyetracker';
+    Duration = 'full';
 end
 
 p = struct; % This structure will contain all task specific parameters, such as Timings and Graphics
@@ -16,16 +17,37 @@ p = struct; % This structure will contain all task specific parameters, such as 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% GoNogo
 
-p.Conditions = {
-    'free'  'go' 2
-    'free'  'no' 1
-    'right' 'go' 2
-    'right' 'no' 1
-    'down'  'go' 2
-    'down'  'no' 1
-    };
+switch Duration
 
-p.nRep = 10;
+    case 'full'
+
+        p.Conditions = {
+            'free'  'go' 2
+            'free'  'no' 1
+            'right' 'go' 2
+            'right' 'no' 1
+            'down'  'go' 2
+            'down'  'no' 1
+            };
+
+        p.nRep = 10;
+
+    case 'training'
+
+        p.Conditions = {
+            'right' 'go' 6
+            'down'  'go' 6
+            'free'  'go' 6
+            'right' 'no' 3
+            'down'  'no' 3
+            'free'  'no' 3
+            };
+
+        p.nRep = 1;
+
+    otherwise
+        error('duration ?')
+end
 
 % % experimentor will choose DOWN or RIGHT
 % p.Conditions = {
@@ -156,7 +178,13 @@ for iBlock = 1 : p.nRep
             cond(c,:) = p.Conditions(i1,1:2);
         end
     end
-    cond = Shuffle(cond,2);
+
+    switch Duration
+        case 'full'
+            cond = Shuffle(cond,2);
+        case 'training'
+            % pass
+    end
 
     for c = 1 : size(cond,1)
         iTrial = iTrial + 1;

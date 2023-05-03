@@ -41,6 +41,7 @@ S.ScreenID        = GUI.CONTROLLER.getScreenID     ( handles );
 S.WindowedMode    = GUI.CONTROLLER.getWindowedMode ( handles );
 S.EyelinkMode     = GUI.CONTROLLER.getEyelinkMode  ( handles );
 S.ParPort         = GUI.CONTROLLER.getParPort      ( handles );
+S.Duration        = GUI.CONTROLLER.getDuration     ( handles );
 
 
 %% Subject ID & Run number
