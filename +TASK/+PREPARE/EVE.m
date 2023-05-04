@@ -24,7 +24,7 @@ eve.img.happy.GetScreenSize();
 eve.img.happy.LoadAndColorizeAlpha(S.TaskParam.EVE.color.yellow);
 eve.img.happy.SmoothAlpha(S.TaskParam.EVE.img.smooth);
 eve.img.happy.mask = 'NoMask';
-eve.img.happy.scale = eve.va2pix * S.TaskParam.EVE.displaysize / eve.img.happy.baseRect(4);
+eve.img.happy.scale = eve.va2pix * S.TaskParam.EVE.img.displaysize / eve.img.happy.baseRect(4);
 eve.img.happy.MakeTexture();
 
 eve.img.sad = PTB_OBJECTS.VIDEO.Image();
@@ -34,7 +34,7 @@ eve.img.sad.GetScreenSize();
 eve.img.sad.LoadAndColorizeAlpha(S.TaskParam.EVE.color.yellow);
 eve.img.sad.SmoothAlpha(S.TaskParam.EVE.img.smooth);
 eve.img.sad.mask = 'NoMask';
-eve.img.sad.scale = eve.va2pix * S.TaskParam.EVE.displaysize / eve.img.sad.baseRect(4);
+eve.img.sad.scale = eve.va2pix * S.TaskParam.EVE.img.displaysize / eve.img.sad.baseRect(4);
 eve.img.sad.MakeTexture();
 
 eve.img.neutral = PTB_OBJECTS.VIDEO.Image();
@@ -44,7 +44,7 @@ eve.img.neutral.GetScreenSize();
 eve.img.neutral.LoadAndColorizeAlpha(S.TaskParam.EVE.color.yellow);
 eve.img.neutral.SmoothAlpha(S.TaskParam.EVE.img.smooth);
 eve.img.neutral.mask = 'NoMask';
-eve.img.neutral.scale = eve.va2pix * S.TaskParam.EVE.displaysize / eve.img.neutral.baseRect(4);
+eve.img.neutral.scale = eve.va2pix * S.TaskParam.EVE.img.displaysize / eve.img.neutral.baseRect(4);
 eve.img.neutral.MakeTexture();
 
 eve.GenRect();

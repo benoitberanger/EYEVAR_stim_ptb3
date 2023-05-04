@@ -6,7 +6,7 @@ function p = Graphics( p )
 
 %% FixationCross (common)
 
-p.FixationCross.dim      = 1.0;                                            % size of cross, in VA
+p.FixationCross.dim      = 0.5;                                            % size of cross, in VA
 p.FixationCross.width    = 0.10 * p.FixationCross.dim;                     % width of cross arm, in VA
 p.FixationCross.color    = [000 000 000 255];                              % [R G B a], from 0 to 255
 p.FixationCross.position = [0.50 0.50];                                    % [ CenterX CenterY ] ratio from 0 to 1 ofscreen size
@@ -44,6 +44,7 @@ p.EVE.img.happy         = 'img/smiley_happy_96px.png';
 p.EVE.img.sad           = 'img/smiley_sad_96px.png';
 p.EVE.img.neutral       = 'img/smiley_neutral_96px.png';
 p.EVE.img.smooth        = 0;                                               % gaussian blur kernel size, in pixel
+p.EVE.img.displaysize   = 2.0;                                             % size of target displayed oval, in VA
 
 
 %% SAURON (common)
