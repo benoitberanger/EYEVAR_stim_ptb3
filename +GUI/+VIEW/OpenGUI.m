@@ -58,7 +58,7 @@ else % Create the figure
     %% Panel proportions
 
     % relative proportions of each panel, from bottom to top
-    PANEL = GUI.VIEW.PanelDispatcher( [0.50 0.50 1.00 0.50 1 0.50 0.50 0.50 1.5 ] );
+    PANEL = GUI.VIEW.PanelDispatcher( [0.50 0.50 1.50 0.50 1 0.50 0.50 0.50 1.0 ] );
 
 
     %% Panel : Subject & Run
@@ -654,30 +654,50 @@ else % Create the figure
         'Position',[p_task.x p_task.y p_task.w p_task.h],...
         'BackgroundColor',figureBGcolor);
 
-    TaskList = GUI.MODEL.getTaskList();
-    TaskVect = ones([1 length(TaskList)]);
+    % Reward
 
-    o_task = GUI.VIEW.ObjectDispatcher( TaskVect );
+    b_task.x   = 0.05;
+    b_task.w   = 0.40;
+    b_task.y   = 0.05;
+    b_task.h   = 0.20;
+    b_task.tag = 'pushbutton_Reward__Incongruent_Right';
+    b_task.name = 'Reward : Incongruent + Right';
+    addTask(handles, b_task)
 
-    for i = 1 : length(TaskList)
+    b_task.x   = 0.55;
+    b_task.w   = 0.40;
+    b_task.y   = 0.05;
+    b_task.h   = 0.20;
+    b_task.tag = 'pushbutton_Reward__Incongruent_Down';
+    b_task.name = 'Reward : Incongruent + Down';
+    addTask(handles, b_task)
 
-        o_task.next();
+    b_task.x   = 0.05;
+    b_task.w   = 0.40;
+    b_task.y   = 0.30;
+    b_task.h   = 0.20;
+    b_task.tag = 'pushbutton_Reward__Congruent_Right';
+    b_task.name = 'Reward : Congruent + Right';
+    addTask(handles, b_task)
 
-        b_task.x   = o_task.xpos;
-        b_task.w   = o_task.xwidth;
-        b_task.y   = o_task.ypos;
-        b_task.h   = o_task.ywidth;
-        b_task.tag = sprintf('pushbutton_%s', TaskList{i});
-        handles.(b_task.tag) = uicontrol(handles.uipanel_Task       ,...
-            'Style'          , 'pushbutton'                         ,...
-            'Units'          , 'Normalized'                         ,...
-            'Position'       , [b_task.x b_task.y b_task.w b_task.h],...
-            'String'         , TaskList{i}                          ,...
-            'BackgroundColor', buttonBGcolor                        ,...
-            'Tag'            , b_task.tag                           ,...
-            'Callback'       , @GUI.MODEL.Core                      );
+    b_task.x   = 0.55;
+    b_task.w   = 0.40;
+    b_task.y   = 0.30;
+    b_task.h   = 0.20;
+    b_task.tag = 'pushbutton_Reward__Congruent_Down';
+    b_task.name = 'Reward : Congruent + Down';
+    addTask(handles, b_task)
 
-    end
+
+    % GoNogo
+
+    b_task.x   = 0.05;
+    b_task.w   = 0.90;
+    b_task.y   = 0.55;
+    b_task.h   = 0.35;
+    b_task.tag = 'pushbutton_GoNogo';
+    b_task.name = 'GoNogo';
+    addTask(handles, b_task)
 
 
     %% Panel : Operation mode
@@ -853,3 +873,17 @@ end
 
 
 end % function
+
+
+function handles = addTask(handles, b_task)
+
+handles.(b_task.tag) = uicontrol(handles.uipanel_Task       ,...
+    'Style'          , 'pushbutton'                         ,...
+    'Units'          , 'Normalized'                         ,...
+    'Position'       , [b_task.x b_task.y b_task.w b_task.h],...
+    'String'         ,  b_task.name                         ,...
+    'BackgroundColor', handles.buttonBGcolor                        ,...
+    'Tag'            , b_task.tag                           ,...
+    'Callback'       , @GUI.MODEL.Core                      );
+end
+

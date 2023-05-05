@@ -31,7 +31,7 @@ S.TimeStampFile   = datestr(now, 30                ); % yyyymmddTHHMMSS : to sor
 
 %% Lots of get*
 
-S.Task            = GUI.CONTROLLER.getTask         ( hObject );
+[ S.Task, S.Congruency, S.Target ] = GUI.CONTROLLER.getTask( hObject );
 S.SaveMode        = GUI.CONTROLLER.getSaveMode     ( handles );
 S.InputMehtod     = GUI.CONTROLLER.getInputMethod  ( handles );
 S.Show            = GUI.CONTROLLER.getShow         ( handles );
