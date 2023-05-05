@@ -11,7 +11,7 @@ try
     %% Prepare recorders
 
     PTB_ENGINE.PrepareRecorders( S.EP );
-    S.BR = EventRecorder({'iTrial', 'iBlock', 'idx', 'condition', 'state', 'dur_expected', 'dur_real', 'onset' 'gaze_fixed' 'smiley'}, p.nTrial * 10);
+    S.BR = EventRecorder({'iTrial', 'iBlock', 'idx', 'condition', 'state', 'dur_expected', 'dur_real', 'onset' 'gaze_fixed' 'smiley', 'reward', 'total'}, p.nTrial * 10);
 
 
     %% Initialize stim objects
@@ -149,6 +149,7 @@ try
                 logit = '';
                 gaze_fixed = NaN;
                 smiley = ' ';
+                reward = NaN;
 
                 while secs < next_event
 
@@ -308,15 +309,12 @@ try
 
                         case 'Reward' %------------------------------------
 
-
-
                             if frame_counter == 1
                                 next_state = 'InterTrialInterval';
 
                                 switch smiley
 
                                     case 'sad'
-
                                         reward = 0;
 
                                     case {'happy', 'neurtral'}
@@ -410,9 +408,10 @@ try
                     end
 
                     if logit
-                        %                         S.BR.AddEvent({evt_iTrial evt_iBlock evt_idx direction condition logit dur_expected flip_onset-state_onset state_onset-StartTime gaze_fixed smiley})
+                        S.BR.AddEvent({evt_iTrial evt_iBlock evt_idx direction logit dur_expected flip_onset-state_onset state_onset-StartTime gaze_fixed smiley, reward, DOOM.total})
                         if strcmp(logit, 'Reward')
                             smiley = ' ';
+                            reward = NaN;
                         end
                         logit = '';
                         gaze_fixed = NaN;
