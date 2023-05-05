@@ -290,14 +290,13 @@ try
                             end
 
 
-
                         case 'Feedback' %----------------------------------
 
                             switch direction
                                 case 'free'
                                     EVE.DrawImage(smiley, free_direction)
                                 otherwise
-                                    EVE.DrawImage(smiley, direction)
+                                    EVE.DrawImage(smiley,      direction)
                             end
 
                             if frame_counter == 1
@@ -309,56 +308,61 @@ try
 
                         case 'Reward' %------------------------------------
 
-                            switch smiley
-                                
-                                case 'sad'
-                                    
-                                    reward = 0;
 
-                                case {'happy', 'neurtral'}
-
-                                    switch direction
-                                        case 'free'
-
-                                            switch free_direction
-                                                case 'right'
-                                                    reward = free_right_reward;
-
-                                                case 'down'
-                                                    reward = free_down_reward;
-
-                                            end
-
-                                        case 'right'
-                                            reward = right_reward;
-
-                                        case 'down'
-                                            reward = down_reward;
-
-                                    end
-
-                            end
-
-                            DOOM.AddReward(reward);
-                            
-                            switch reward
-                                case +9
-                                    color = 'green';
-                                case +1
-                                    color = 'white';
-                                case 0
-                                    color = 'red';
-                                otherwise
-                                    error('reward value ?')
-                            end
-                            DOOM.Draw(color);
 
                             if frame_counter == 1
                                 next_state = 'InterTrialInterval';
+
+                                switch smiley
+
+                                    case 'sad'
+
+                                        reward = 0;
+
+                                    case {'happy', 'neurtral'}
+
+                                        switch direction
+                                            case 'free'
+
+                                                switch free_direction
+                                                    case 'right'
+                                                        reward = free_right_reward;
+
+                                                    case 'down'
+                                                        reward = free_down_reward;
+
+                                                end
+
+                                            case 'right'
+                                                reward = right_reward;
+
+                                            case 'down'
+                                                reward = down_reward;
+
+                                        end
+
+                                end
+
+                                DOOM.AddReward(reward);
+
+                                switch reward
+                                    case +9
+                                        color = 'green';
+                                    case +1
+                                        color = 'white';
+                                    case 0
+                                        color = 'red';
+                                    otherwise
+                                        error('reward value ?')
+                                end
+
                             elseif frame_counter == 2
                                 dur_expected = p.dur_Reward;
                                 next_onset = state_onset + dur_expected;
                             end
+
+                            DOOM.Draw(color);
+
 
                         case 'InterTrialInterval' %------------------------
 
@@ -407,7 +411,7 @@ try
 
                     if logit
                         %                         S.BR.AddEvent({evt_iTrial evt_iBlock evt_idx direction condition logit dur_expected flip_onset-state_onset state_onset-StartTime gaze_fixed smiley})
-                        if strcmp(logit, 'Feedback')
+                        if strcmp(logit, 'Reward')
                             smiley = ' ';
                         end
                         logit = '';
