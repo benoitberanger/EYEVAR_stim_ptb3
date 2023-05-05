@@ -1,10 +1,11 @@
-function [ EP, TaskParam ] = Parameters( OperationMode, InputMethod, Duration )
+function [ EP, TaskParam ] = Parameters( OperationMode, InputMethod, Congruency, HighRewarded )
 global S
 
 if nargin < 1 % only to plot the paradigme when we execute the function outside of the main script
     OperationMode = 'Acquisition';
     InputMethod = 'eyetracker';
-    Duration = 'full';
+    Congruency = 'congruent';
+    HighRewarded = 'right';
 end
 
 p = struct; % This structure will contain all task specific parameters, such as Timings and Graphics
@@ -17,44 +18,13 @@ p = struct; % This structure will contain all task specific parameters, such as 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% GoNogo
 
-switch Duration
+p.Conditions = {
+    'free'  2
+    'right' 1
+    'down'  1
+    };
 
-    case 'full'
-
-        p.Conditions = {
-            'free'  'go' 2
-            'free'  'no' 1
-            'right' 'go' 2
-            'right' 'no' 1
-            'down'  'go' 2
-            'down'  'no' 1
-            };
-
-        p.nRep = 10;
-
-    case 'training'
-
-        p.Conditions = {
-            'right' 'go' 6
-            'down'  'go' 6
-            'free'  'go' 6
-            'right' 'no' 3
-            'down'  'no' 3
-            'free'  'no' 3
-            };
-
-        p.nRep = 1;
-
-    otherwise
-        error('duration ?')
-end
-
-% % experimentor will choose DOWN or RIGHT
-% p.Conditions = {
-%     % cond        nFree  nHighReward nNowReward FreeHighAmounnt FreeLowAmount InstructedHighAmounnt InstructedLowAmounnt
-%     'congruent'   20     20         20               +9         +1               +9                 +1
-%     'incongruent' 20     20         20               +1         +9               +9                 +1
-%     };
+p.nRep = 20;
 
 
 %% Timings
@@ -72,10 +42,11 @@ switch InputMethod
         p.dur_TargetAppearance           = 0.400 + [-0.200 +0.200];
 
         p.dur_ResponseCue_Maximum        = 0.850;
-        p.dur_ResponseCue_No_MinimumStay = 0.500;
         p.dur_ResponseCue_Go_MinimumStay = 0.100;
 
         p.dur_Feedback                   = 0.200;                      % smiley display duration
+
+        p.dur_Reward                     = 0.500;
 
         p.dur_InterTrailInterval         = 6.000 + [-0.500 +0.500];
 
@@ -90,10 +61,11 @@ switch InputMethod
         p.dur_TargetAppearance           = 0.400 + [-0.200 +0.200];
 
         p.dur_ResponseCue_Maximum        = 1.500;
-        p.dur_ResponseCue_No_MinimumStay = 0.500;
         p.dur_ResponseCue_Go_MinimumStay = 0.500;
 
         p.dur_Feedback                   = 0.200;                      % smiley display duration
+
+        p.dur_Reward                     = 0.500;
 
         p.dur_InterTrailInterval         = 6.000 + [-0.500 +0.500];
 
@@ -130,7 +102,7 @@ p = TASK.Graphics( p );
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-nTrial_per_rep = sum(cell2mat(p.Conditions(:,3)));
+nTrial_per_rep = sum(cell2mat(p.Conditions(:,2)));
 p.nTrial = nTrial_per_rep * p.nRep;
 
 
@@ -155,7 +127,7 @@ end
 
 % Create and prepare
 header = {'event_name', 'onset(s)', 'duration(s)',...
-    'direction', 'condition', 'iTrial', 'iBlock', 'idx'};
+    'congruency', 'highrewarded', 'iTrial', 'iBlock', 'idx'};
 EP     = EventPlanning(header);
 
 % NextOnset = PreviousOnset + PreviousDuration
@@ -170,26 +142,21 @@ EP.AddStartTime('StartTime',0);
 iTrial = 0;
 for iBlock = 1 : p.nRep
 
-    cond = cell(nTrial_per_rep,2);
+    cond = cell(nTrial_per_rep,1);
     c = 0;
     for i1 = 1 : size(p.Conditions,1)
-        for i2 = 1 : p.Conditions{i1,3}
+        for i2 = 1 : p.Conditions{i1,2}
             c = c + 1;
-            cond(c,:) = p.Conditions(i1,1:2);
+            cond(c,:) = p.Conditions(i1,1);
         end
     end
 
-    switch Duration
-        case 'full'
-            cond = Shuffle(cond,2);
-        case 'training'
-            % pass
-    end
+    cond = Shuffle(cond,2);
 
     for c = 1 : size(cond,1)
         iTrial = iTrial + 1;
-        EP.AddEvent({ [cond{c,1} '_' cond{c,2}] NextOnset(EP) 10 ...
-            cond{c,1} cond{c,2} iTrial iBlock c})
+        EP.AddEvent({ cond{c,1} NextOnset(EP) 10 ...
+            Congruency HighRewarded iTrial iBlock c})
     end
 
 end

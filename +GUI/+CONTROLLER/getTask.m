@@ -1,4 +1,4 @@
-function [ Task, Congruency, Target ] = getTask( hObject )
+function [ Task, Congruency, HighRewarded ] = getTask( hObject )
 
 label = strrep( get(hObject,'Tag'), 'pushbutton_', '' );
 
@@ -10,13 +10,13 @@ if numel(res1) > 1
 
     res2 = strsplit(res1{2}, '_');
 
-    Congruency = res2{1};
-    Target     = res2{2};
+    Congruency  = res2{1};
+    HighRewarded= res2{2};
     
 else
     
-    Congruency = '';
-    Target     = '';
+    Congruency  = '';
+    HighRewarded= '';
 
 end
 

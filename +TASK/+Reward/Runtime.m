@@ -5,13 +5,13 @@ try
     %% Tuning of the task
 
     TASK.Keybindings();
-    [ EP, p ] = TASK.GoNogo.Parameters( S.OperationMode, S.InputMehtod, S.Duration );
+    [ EP, p ] = TASK.Reward.Parameters( S.OperationMode, S.InputMehtod, S.Congruency, S.HighRewarded );
 
 
     %% Prepare recorders
 
     PTB_ENGINE.PrepareRecorders( S.EP );
-    S.BR = EventRecorder({'iTrial', 'iBlock', 'idx', 'condition', 'direction', 'state', 'dur_expected', 'dur_real', 'onset' 'gaze_fixed' 'smiley'}, p.nTrial * 10);
+    S.BR = EventRecorder({'iTrial', 'iBlock', 'idx', 'condition', 'state', 'dur_expected', 'dur_real', 'onset' 'gaze_fixed' 'smiley'}, p.nTrial * 10);
 
 
     %% Initialize stim objects
@@ -20,6 +20,7 @@ try
     WALL_E        = TASK.PREPARE.WALL_E();
     EVE           = TASK.PREPARE.EVE(WALL_E);
     SAURON        = TASK.PREPARE.SAURON();
+    DOOM          = TASK.PREPARE.DOOM();
 
 
     %% Shortcuts
@@ -43,6 +44,47 @@ try
         columns.(col_name) = c;
     end
 
+    %% static parameters from the run itslef
+
+    switch S.Congruency
+
+        case 'congruent'
+
+            switch S.HighRewarded
+                case 'right'
+                    right_reward = +9;
+                    down_reward  = +1;
+                    free_right_reward = +9;
+                    free_down_reward = +1;
+                case 'down'
+                    right_reward = +1;
+                    down_reward  = +9;
+                    free_right_reward = +1;
+                    free_down_reward = +9;
+                otherwise
+                    error('highrewarded ?')
+            end
+
+        case 'incongruent'
+            switch S.HighRewarded
+                case 'right'
+                    right_reward = +9;
+                    down_reward  = +1;
+                    free_right_reward = +1;
+                    free_down_reward = +9;
+                case 'down'
+                    right_reward = +1;
+                    down_reward  = +9;
+                    free_right_reward = +9;
+                    free_down_reward = +1;
+                otherwise
+                    error('highrewarded ?')
+            end
+
+        otherwise
+            error('congruency ?')
+    end
+
 
     %% GO
 
@@ -60,6 +102,8 @@ try
         evt_iTrial   = EP.Data{evt,columns.iTrial};
         evt_iBlock   = EP.Data{evt,columns.iBlock};
         evt_idx      = EP.Data{evt,columns.idx};
+        evt_congruency   = EP.Data{evt,columns.congruency};
+        evt_highrewarded = EP.Data{evt,columns.highrewarded};
 
         if evt < nEvents
             next_evt_onset = EP.Data{evt+1,columns.onset_s_};
@@ -90,16 +134,14 @@ try
                 S.ER.AddStopTime( 'StopTime' , StopTime - StartTime );
 
 
-            case {'free_go', 'free_no', 'right_go','right_no', 'left_go','left_no', 'up_go','up_no', 'down_go','down_no'}
+            case {'free', 'down', 'right'}
 
-                res = strsplit(evt_name,'_');
-                condition = res{2};
-                direction = res{1};
+                direction = evt_name;
                 next_event = StartTime + next_evt_onset - slack;
 
                 % log
-                fprintf('trial=%3d    block=%2d    idx=%1d    direction=%5s    condition=%2s \n', ...
-                    evt_iTrial, evt_iBlock, evt_idx, direction, condition)
+                fprintf('trial=%3d    block=%2d    idx=%1d    direction=%5s \n', ...
+                    evt_iTrial, evt_iBlock, evt_idx, direction)
 
                 state = 'ActionSelection';
                 frame_counter = 0;
@@ -179,14 +221,7 @@ try
 
                             EVE.DrawFillSquare('down');
                             EVE.DrawFillSquare('right');
-                            switch condition
-                                case 'go'
-                                    WALL_E.DrawFillSquare('green')
-
-                                case 'no'
-                                    WALL_E.DrawFillSquare('red')
-
-                            end
+                            WALL_E.DrawFillSquare('green')
 
                             if frame_counter == 1
                                 next_state = 'Feedback';
@@ -198,113 +233,130 @@ try
                                 next_onset = state_onset + dur_expected;
                             end
 
-                            switch condition
-                                case 'go'
-
-                                    switch direction
-                                        case 'free'
-                                            isinrect_down  = IsInRect(gaze_x, gaze_y, EVE.windowRect.down );
-                                            isinrect_right = IsInRect(gaze_x, gaze_y, EVE.windowRect.right);
-                                            isinrect = isinrect_down + isinrect_right;
-                                            if isinrect_down
-                                                free_direction = {'down'};
-                                            elseif isinrect_right
-                                                free_direction = {'right'};
-                                            end
-                                        otherwise
-                                            isinrect = IsInRect(gaze_x, gaze_y, EVE.windowRect.(direction));
+                            switch direction
+                                case 'free'
+                                    isinrect_down  = IsInRect(gaze_x, gaze_y, EVE.windowRect.down );
+                                    isinrect_right = IsInRect(gaze_x, gaze_y, EVE.windowRect.right);
+                                    isinrect = isinrect_down + isinrect_right;
+                                    if isinrect_down
+                                        free_direction = 'down';
+                                    elseif isinrect_right
+                                        free_direction = 'right';
                                     end
+                                otherwise
+                                    isinrect = IsInRect(gaze_x, gaze_y, EVE.windowRect.(direction));
+                            end
 
-                                    if isinrect
-                                        fixation_duration = fixation_duration + S.PTB.Video.IFI;
+                            if isinrect
+                                fixation_duration = fixation_duration + S.PTB.Video.IFI;
 
-                                        if fixation_duration >= p.dur_ResponseCue_Go_MinimumStay
-                                            gaze_fixed = +1;
-                                            logit = state;
-                                            state = 'Feedback';
-                                            smiley = 'happy';
-                                            fixation_duration = 0;
-                                            frame_counter = 0;
-                                        end
-                                    end
+                                if fixation_duration >= p.dur_ResponseCue_Go_MinimumStay
+                                    gaze_fixed = +1;
+                                    logit = state;
+                                    state = 'Feedback';
+                                    smiley = 'happy';
+                                    fixation_duration = 0;
+                                    frame_counter = 0;
+                                end
+                            end
 
-                                    if fixation_duration > 0 && ~isinrect % in the target, then out -> FAIL
+                            if fixation_duration > 0 && ~isinrect % in the target, then out -> FAIL
+                                gaze_fixed = -1;
+                                smiley = 'neutral';
+                                logit = state;
+                                state = 'Feedback';
+                                fixation_duration = 0;
+                                frame_counter = 0;
+
+                            elseif frame_counter > 2 && fixation_duration == 0 && (next_onset-flip_onset) < p.dur_ResponseCue_Go_MinimumStay % no time left to reach the target
+                                switch direction
+                                    case 'free'
                                         gaze_fixed = -1;
-                                        smiley = 'neutral';
                                         logit = state;
                                         state = 'Feedback';
-                                        fixation_duration = 0;
-                                        frame_counter = 0;
-
-                                    elseif frame_counter > 2 && fixation_duration == 0 && (next_onset-flip_onset) < p.dur_ResponseCue_Go_MinimumStay % no time left to reach the target
-                                        switch direction
-                                            case 'free'
-                                                gaze_fixed = -1;
-                                                logit = state;
-                                                state = 'Feedback';
-                                                smiley = 'sad';
-                                                fixation_duration = 0;
-                                                frame_counter = 0;
-                                                free_direction = {'center'};
-                                            otherwise
-                                                gaze_fixed = -1;
-                                                logit = state;
-                                                state = 'Feedback';
-                                                smiley = 'sad';
-                                                fixation_duration = 0;
-                                                frame_counter = 0;
-                                        end
-
-                                    end
-
-                                case 'no'
-
-                                    isinrect = IsInRect(gaze_x, gaze_y, WALL_E.windowRect);
-
-                                    if isinrect
-                                        fixation_duration = fixation_duration + S.PTB.Video.IFI;
-
-                                        if fixation_duration >= p.dur_ResponseCue_No_MinimumStay
-                                            gaze_fixed = +1;
-                                            logit = state;
-                                            state = 'Feedback';
-                                            smiley = 'happy';
-                                            fixation_duration = 0;
-                                            frame_counter = 0;
-                                        end
-                                    end
-
-                                    if fixation_duration > 0 && ~isinrect % in the center, then out -> FAIL
-                                        gaze_fixed = -1;
                                         smiley = 'sad';
-                                        logit = state;
-                                        state = 'Feedback';
                                         fixation_duration = 0;
                                         frame_counter = 0;
-                                    end
+                                        free_direction = 'center';
+                                    otherwise
+                                        gaze_fixed = -1;
+                                        logit = state;
+                                        state = 'Feedback';
+                                        smiley = 'sad';
+                                        fixation_duration = 0;
+                                        frame_counter = 0;
+                                end
 
                             end
 
-                        case 'Feedback' %-----------------------------------
 
-                            switch condition
-                                case 'go'
+
+                        case 'Feedback' %----------------------------------
+
+                            switch direction
+                                case 'free'
+                                    EVE.DrawImage(smiley, free_direction)
+                                otherwise
+                                    EVE.DrawImage(smiley, direction)
+                            end
+
+                            if frame_counter == 1
+                                next_state = 'Reward';
+                            elseif frame_counter == 2
+                                dur_expected = p.dur_Feedback;
+                                next_onset = state_onset + dur_expected;
+                            end
+
+                        case 'Reward' %------------------------------------
+
+                            switch smiley
+                                
+                                case 'sad'
+                                    
+                                    reward = 0;
+
+                                case {'happy', 'neurtral'}
+
                                     switch direction
                                         case 'free'
-                                            for d = 1 : length(free_direction)
-                                                EVE.DrawImage(smiley, free_direction{d})
+
+                                            switch free_direction
+                                                case 'right'
+                                                    reward = free_right_reward;
+
+                                                case 'down'
+                                                    reward = free_down_reward;
+
                                             end
-                                        otherwise
-                                            EVE.DrawImage(smiley, direction)
+
+                                        case 'right'
+                                            reward = right_reward;
+
+                                        case 'down'
+                                            reward = down_reward;
+
                                     end
-                                case 'no'
-                                    EVE.DrawImage(smiley, 'center')
+
                             end
+
+                            DOOM.AddReward(reward);
+                            
+                            switch reward
+                                case +9
+                                    color = 'green';
+                                case +1
+                                    color = 'white';
+                                case 0
+                                    color = 'red';
+                                otherwise
+                                    error('reward value ?')
+                            end
+                            DOOM.Draw(color);
 
                             if frame_counter == 1
                                 next_state = 'InterTrialInterval';
                             elseif frame_counter == 2
-                                dur_expected = p.dur_Feedback;
+                                dur_expected = p.dur_Reward;
                                 next_onset = state_onset + dur_expected;
                             end
 
@@ -354,7 +406,7 @@ try
                     end
 
                     if logit
-                        S.BR.AddEvent({evt_iTrial evt_iBlock evt_idx direction condition logit dur_expected flip_onset-state_onset state_onset-StartTime gaze_fixed smiley})
+                        %                         S.BR.AddEvent({evt_iTrial evt_iBlock evt_idx direction condition logit dur_expected flip_onset-state_onset state_onset-StartTime gaze_fixed smiley})
                         if strcmp(logit, 'Feedback')
                             smiley = ' ';
                         end

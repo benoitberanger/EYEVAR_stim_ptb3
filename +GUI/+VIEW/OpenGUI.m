@@ -660,7 +660,7 @@ else % Create the figure
     b_task.w   = 0.40;
     b_task.y   = 0.05;
     b_task.h   = 0.20;
-    b_task.tag = 'pushbutton_Reward__Incongruent_Right';
+    b_task.tag = 'pushbutton_Reward__incongruent_right';
     b_task.name = 'Reward : Incongruent + Right';
     addTask(handles, b_task)
 
@@ -668,7 +668,7 @@ else % Create the figure
     b_task.w   = 0.40;
     b_task.y   = 0.05;
     b_task.h   = 0.20;
-    b_task.tag = 'pushbutton_Reward__Incongruent_Down';
+    b_task.tag = 'pushbutton_Reward__incongruent_down';
     b_task.name = 'Reward : Incongruent + Down';
     addTask(handles, b_task)
 
@@ -676,7 +676,7 @@ else % Create the figure
     b_task.w   = 0.40;
     b_task.y   = 0.30;
     b_task.h   = 0.20;
-    b_task.tag = 'pushbutton_Reward__Congruent_Right';
+    b_task.tag = 'pushbutton_Reward__congruent_right';
     b_task.name = 'Reward : Congruent + Right';
     addTask(handles, b_task)
 
@@ -684,7 +684,7 @@ else % Create the figure
     b_task.w   = 0.40;
     b_task.y   = 0.30;
     b_task.h   = 0.20;
-    b_task.tag = 'pushbutton_Reward__Congruent_Down';
+    b_task.tag = 'pushbutton_Reward__congruent_down';
     b_task.name = 'Reward : Congruent + Down';
     addTask(handles, b_task)
 

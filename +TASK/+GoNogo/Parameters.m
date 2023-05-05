@@ -49,13 +49,6 @@ switch Duration
         error('duration ?')
 end
 
-% % experimentor will choose DOWN or RIGHT
-% p.Conditions = {
-%     % cond        nFree  nHighReward nNowReward FreeHighAmounnt FreeLowAmount InstructedHighAmounnt InstructedLowAmounnt
-%     'congruent'   20     20         20               +9         +1               +9                 +1
-%     'incongruent' 20     20         20               +1         +9               +9                 +1
-%     };
-
 
 %% Timings
 

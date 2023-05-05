@@ -4,7 +4,7 @@ function p = Graphics( p )
 %           y is the height from top  to bottom
 
 
-%% FixationCross (common)
+%% FixationCross
 
 p.FixationCross.dim      = 0.5;                                            % size of cross, in VA
 p.FixationCross.width    = 0.10 * p.FixationCross.dim;                     % width of cross arm, in VA
@@ -12,8 +12,7 @@ p.FixationCross.color    = [000 000 000 255];                              % [R 
 p.FixationCross.position = [0.50 0.50];                                    % [ CenterX CenterY ] ratio from 0 to 1 ofscreen size
 
 
-%% WALL_E (common)
-
+%% WALL_E
 p.WALL_E.displaysize    = 1.0;                                             % size of central displayed rect/frame, in VA
 p.WALL_E.windowsize     = 2.0;                                             % size of central gaze accepted window, in VA
 p.WALL_E.width          = 0.10 * p.WALL_E.displaysize;                     % width of central displayed frame, in VA
@@ -33,7 +32,7 @@ p.WALL_E.img.dim        = (p.WALL_E.displaysize - p.WALL_E.width) * 0.9;   % ima
 p.WALL_E.img.smooth     = 0;                                               % gaussian blur kernel size, in pixel
 
 
-%% EVE (common)
+%% EVE
 
 p.EVE.displaysize       = 1.0;                                             % size of target displayed oval, in VA
 p.EVE.windowsize        = 2.0;                                             % size of target gaze accepted window, in VA
@@ -47,10 +46,20 @@ p.EVE.img.smooth        = 0;                                               % gau
 p.EVE.img.displaysize   = 2.0;                                             % size of target displayed oval, in VA
 
 
-%% SAURON (common)
+%% SAURON
 
 p.SAURON.dim            = 0.2;                                             % size of rect/cicle, in VA
 p.SAURON.color          = [112 158 196 255];                               % [R G B a] from 0 to 255
+
+
+%% DDOM
+
+p.DOOM.font_name        = 'Arial';
+p.DOOM.font_size        = 2.0;                                             % size of font, in VA
+
+p.DOOM.color.green      = p.WALL_E.color.green;
+p.DOOM.color.white      = p.WALL_E.color.white;
+p.DOOM.color.red        = [176 032 024 255];
 
 
 end % function
