@@ -16,15 +16,15 @@ p = struct; % This structure will contain all task specific parameters, such as 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % MODIFY FROM HERE....
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% GoNogo
+%free and instructed
 
 p.Conditions = {
-    'free'  2
-    'right' 1
-    'down'  1
+    'free'  6
+    'right' 2
+    'down'  2
     };
 
-p.nRep = 20;
+p.nRep = 8;
 
 
 %% Timings
@@ -41,7 +41,7 @@ switch InputMethod
 
         p.dur_TargetAppearance           = 0.400 + [-0.200 +0.200];
 
-        p.dur_ResponseCue_Maximum        = 0.850;
+        p.dur_ResponseCue_Maximum        = 0.500;
         p.dur_ResponseCue_Go_MinimumStay = 0.100;
 
         p.dur_Feedback                   = 0.200;                      % smiley display duration

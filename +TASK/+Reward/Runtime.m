@@ -317,7 +317,7 @@ try
                                     case 'sad'
                                         reward = 0;
 
-                                    case {'happy', 'neurtral'}
+                                    case {'happy', 'neutral'}
 
                                         switch direction
                                             case 'free'
