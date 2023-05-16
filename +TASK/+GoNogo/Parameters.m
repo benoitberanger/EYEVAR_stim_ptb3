@@ -30,17 +30,17 @@ switch Duration
             'down'  'no' 1
             };
 
-        p.nRep = 10;
+        p.nRep = 7;
 
     case 'training'
 
         p.Conditions = {
-            'right' 'go' 6
-            'down'  'go' 6
-            'free'  'go' 6
-            'right' 'no' 3
-            'down'  'no' 3
-            'free'  'no' 3
+            'right' 'go' 3
+            'down'  'go' 3
+            'free'  'go' 3
+            'right' 'no' 2
+            'down'  'no' 2
+            'free'  'no' 2
             };
 
         p.nRep = 1;
@@ -70,7 +70,7 @@ switch InputMethod
 
         p.dur_Feedback                   = 0.200;                      % smiley display duration
 
-        p.dur_InterTrailInterval         = 6.000 + [-0.500 +0.500];
+        p.dur_InterTrailInterval         = 6.000 + [-1.500 +1.500];
 
     case 'mouse'
 
@@ -88,7 +88,7 @@ switch InputMethod
 
         p.dur_Feedback                   = 0.200;                      % smiley display duration
 
-        p.dur_InterTrailInterval         = 6.000 + [-0.500 +0.500];
+        p.dur_InterTrailInterval         = 6.000 + [-1.500 +1.500];
 
     otherwise
         error('input method ?')

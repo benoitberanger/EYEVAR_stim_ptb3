@@ -230,7 +230,7 @@ try
 
                                     if fixation_duration > 0 && ~isinrect % in the target, then out -> FAIL
                                         gaze_fixed = -1;
-                                        smiley = 'neutral';
+                                        smiley = 'happy';
                                         logit = state;
                                         state = 'Feedback';
                                         fixation_duration = 0;
