@@ -14,7 +14,7 @@ p.FixationCross.position = [0.50 0.50];                                    % [ C
 
 %% WALL_E
 p.WALL_E.displaysize    = 1.0;                                             % size of central displayed rect/frame, in VA
-p.WALL_E.windowsize     = 2.0;                                             % size of central gaze accepted window, in VA
+p.WALL_E.windowsize     = 3.0;                                             % size of central gaze accepted window, in VA
 p.WALL_E.width          = 0.10 * p.WALL_E.displaysize;                     % width of central displayed frame, in VA
 p.WALL_E.center         = [0.50 0.50];                                     % [ CenterX CenterY ] ratio from 0 to 1 ofscreen size
 

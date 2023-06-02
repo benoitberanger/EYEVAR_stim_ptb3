@@ -225,7 +225,7 @@ try
                             WALL_E.DrawFillSquare('green')
 
                             if frame_counter == 1
-                                next_state = 'Feedback';
+                                next_state = 'Reward';
                                 fixation_duration = 0;
                                 gaze_fixed = -1;
                                 smiley = 'sad';
@@ -254,7 +254,7 @@ try
                                 if fixation_duration >= p.dur_ResponseCue_Go_MinimumStay
                                     gaze_fixed = +1;
                                     logit = state;
-                                    state = 'Feedback';
+                                    state = 'Reward';
                                     smiley = 'happy';
                                     fixation_duration = 0;
                                     frame_counter = 0;
@@ -263,9 +263,9 @@ try
 
                             if fixation_duration > 0 && ~isinrect % in the target, then out -> FAIL
                                 gaze_fixed = -1;
-                                smiley = 'neutral';
+                                smiley = 'happy';
                                 logit = state;
-                                state = 'Feedback';
+                                state = 'Reward';
                                 fixation_duration = 0;
                                 frame_counter = 0;
 
@@ -274,7 +274,7 @@ try
                                     case 'free'
                                         gaze_fixed = -1;
                                         logit = state;
-                                        state = 'Feedback';
+                                        state = 'Reward';
                                         smiley = 'sad';
                                         fixation_duration = 0;
                                         frame_counter = 0;
@@ -282,7 +282,7 @@ try
                                     otherwise
                                         gaze_fixed = -1;
                                         logit = state;
-                                        state = 'Feedback';
+                                        state = 'Reward';
                                         smiley = 'sad';
                                         fixation_duration = 0;
                                         frame_counter = 0;
@@ -317,7 +317,7 @@ try
                                     case 'sad'
                                         reward = 0;
 
-                                    case {'happy', 'neutral'}
+                                    case {'happy'}
 
                                         switch direction
                                             case 'free'
@@ -347,7 +347,7 @@ try
                                     case +9
                                         color = 'green';
                                     case +1
-                                        color = 'white';
+                                        color = 'green';
                                     case 0
                                         color = 'red';
                                     otherwise

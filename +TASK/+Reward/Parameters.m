@@ -46,9 +46,9 @@ switch InputMethod
 
         p.dur_Feedback                   = 0.200;                      % smiley display duration
 
-        p.dur_Reward                     = 0.500;
+        p.dur_Reward                     = 0.700;
 
-        p.dur_InterTrailInterval         = 6.000 + [-0.500 +0.500];
+        p.dur_InterTrailInterval         = 6.000 + [-1.500 +1.500];
 
     case 'mouse'
 
@@ -67,7 +67,7 @@ switch InputMethod
 
         p.dur_Reward                     = 0.500;
 
-        p.dur_InterTrailInterval         = 6.000 + [-0.500 +0.500];
+        p.dur_InterTrailInterval         = 6.000 + [-1.500 +1.500];
 
     otherwise
         error('input method ?')
