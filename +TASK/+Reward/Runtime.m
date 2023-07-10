@@ -26,11 +26,11 @@ try
     %% Shortcuts
 
     ER          = S.ER; % EventRecorder
-    BR          = S.BR; % BehaviourRecorder (EventRecorder)
+    % BR          = S.BR; % BehaviourRecorder (EventRecorder)
     SR          = SAURON.recorder;
     S.SR        = SR;
     wPtr        = S.PTB.Video.wPtr;
-    wRect       = S.PTB.Video.wRect;
+    % wRect       = S.PTB.Video.wRect;
     slack       = S.PTB.Video.slack;
     KEY_ESCAPE  = S.Keybinds.Common.Stop_Escape;
     if S.MovieMode, moviePtr = S.moviePtr; end
@@ -97,13 +97,13 @@ try
 
         % Shortcuts
         evt_name     = EP.Data{evt,columns.event_name};
-        evt_onset    = EP.Data{evt,columns.onset_s_};
-        evt_duration = EP.Data{evt,columns.duration_s_};
+        % evt_onset    = EP.Data{evt,columns.onset_s_};
+        % evt_duration = EP.Data{evt,columns.duration_s_};
         evt_iTrial   = EP.Data{evt,columns.iTrial};
         evt_iBlock   = EP.Data{evt,columns.iBlock};
         evt_idx      = EP.Data{evt,columns.idx};
-        evt_congruency   = EP.Data{evt,columns.congruency};
-        evt_highrewarded = EP.Data{evt,columns.highrewarded};
+        % evt_congruency   = EP.Data{evt,columns.congruency};
+        % evt_highrewarded = EP.Data{evt,columns.highrewarded};
 
         if evt < nEvents
             next_evt_onset = EP.Data{evt+1,columns.onset_s_};
@@ -367,11 +367,15 @@ try
                             FIXATIONCROSS.Draw();
 
                             if frame_counter == 1
-                                next_state = '';
+                                next_state = '<<NETX_TRIAL>>';
                             elseif frame_counter == 2
                                 dur_expected = p.jitters.dur_InterTrailInterval(evt_iTrial);
                                 next_onset = state_onset + dur_expected;
                             end
+
+
+                        case '<<NETX_TRIAL>>' %----------------------------
+
 
                         otherwise %----------------------------------------
                             error('state ?')
@@ -417,7 +421,7 @@ try
                         gaze_fixed = NaN;
                     end
 
-                    if isempty(state)
+                    if strcmp(state, '<<NETX_TRIAL>>')
                         % log
                         fprintf('\n\n')
                         break
