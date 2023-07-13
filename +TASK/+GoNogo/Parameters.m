@@ -160,6 +160,8 @@ EP.AddStartTime('StartTime',0);
 
 % --- Stim ----------------------------------------------------------------
 
+absurd_max_trial_duration = 60; % seconds : just need a big stupid value
+
 iTrial = 0;
 for iBlock = 1 : p.nRep
 
@@ -181,7 +183,7 @@ for iBlock = 1 : p.nRep
 
     for c = 1 : size(cond,1)
         iTrial = iTrial + 1;
-        EP.AddEvent({ [cond{c,1} '_' cond{c,2}] NextOnset(EP) 10 ...
+        EP.AddEvent({ [cond{c,1} '_' cond{c,2}] NextOnset(EP) absurd_max_trial_duration ...
             cond{c,1} cond{c,2} iTrial iBlock c})
     end
 

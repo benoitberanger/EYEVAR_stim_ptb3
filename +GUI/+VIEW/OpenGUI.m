@@ -474,7 +474,7 @@ else % Create the figure
         'HorizontalAlignment','Center',...
         'TooltipString','Send messages via parallel port : useful for Eyelink',...
         'BackgroundColor',figureBGcolor,...
-        'Value',0,...
+        'Value',1,...
         'Callback',@GUI.Checkbox_ParPort_Callback,...
         'CreateFcn',@GUI.Checkbox_ParPort_Callback,...
         'Visible','On');
@@ -662,7 +662,7 @@ else % Create the figure
     b_task.h   = 0.20;
     b_task.tag = 'pushbutton_Reward__incongruent_right';
     b_task.name = 'Reward : Incongruent + Right';
-    addTask(handles, b_task)
+    addTask(handles, b_task);
 
     b_task.x   = 0.55;
     b_task.w   = 0.40;
@@ -670,7 +670,7 @@ else % Create the figure
     b_task.h   = 0.20;
     b_task.tag = 'pushbutton_Reward__incongruent_down';
     b_task.name = 'Reward : Incongruent + Down';
-    addTask(handles, b_task)
+    addTask(handles, b_task);
 
     b_task.x   = 0.05;
     b_task.w   = 0.40;
@@ -678,7 +678,7 @@ else % Create the figure
     b_task.h   = 0.20;
     b_task.tag = 'pushbutton_Reward__congruent_right';
     b_task.name = 'Reward : Congruent + Right';
-    addTask(handles, b_task)
+    addTask(handles, b_task);
 
     b_task.x   = 0.55;
     b_task.w   = 0.40;
@@ -686,7 +686,7 @@ else % Create the figure
     b_task.h   = 0.20;
     b_task.tag = 'pushbutton_Reward__congruent_down';
     b_task.name = 'Reward : Congruent + Down';
-    addTask(handles, b_task)
+    addTask(handles, b_task);
 
 
     % GoNogo
@@ -697,7 +697,7 @@ else % Create the figure
     b_task.h   = 0.35;
     b_task.tag = 'pushbutton_GoNogo';
     b_task.name = 'GoNogo';
-    addTask(handles, b_task)
+    addTask(handles, b_task);
 
 
     %% Panel : Operation mode
